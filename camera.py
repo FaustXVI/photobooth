@@ -39,7 +39,7 @@ screen_dimensions = (screen_info.current_w, screen_info.current_h)
 screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
 background = pygame.Surface(screen.get_size()).convert()
 
-camera =  picamera.PiCamera(resolution=(1920, 1080), framerate=15,sensor_mode=5)
+camera =  picamera.PiCamera(resolution=screen_dimensions, framerate=15,sensor_mode=5)
 # Initialise the camera object
 camera.rotation = 0
 camera.hflip = True
