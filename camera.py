@@ -10,15 +10,13 @@ from pygame.locals import *
 from time import sleep
 from PIL import Image, ImageDraw
 
+HD_RESOLUTION = (1920, 1080)
+
 PHOTO_FOLDER = 'Photos'
 IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
-TEMPLATE_FOLDER = os.path.join(PHOTO_FOLDER, 'Template')
 BUTTON_PIN = 25
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
-TEMPLATE_TOP_RIGHT = (625, 30)
-TEMPLATE_BOTTOM_LEFT = (55, 410)
-TEMPLATE_BOTTOM_RIGHT = (625, 410)
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
@@ -37,7 +35,7 @@ def create_screen():
 
 
 def create_camera(a_screen):
-    c = picamera.PiCamera(resolution=a_screen.get_size(),
+    c = picamera.PiCamera(resolution=HD_RESOLUTION,
                           framerate=30,
                           sensor_mode=5)
     c.rotation = 0
