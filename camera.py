@@ -11,10 +11,7 @@ from time import sleep
 from PIL import Image, ImageDraw
 
 # initialise global variables
-CountPhotoOnCart = ""
-SmallMessage = ""  # SmallMessage is a lower banner message
 TotalImageCount = 0  # Counter for Display and to monitor paper usage
-PhotosPerCart = 30  # Selphy takes 16 sheets per tray
 imagecounter = 0
 imagefolder = 'Photos'
 templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
@@ -226,7 +223,6 @@ def TakePictures():
     global screen
     global background
     global pygame
-    global PhotosPerCart
     global TotalImageCount
 
     input(pygame.event.get())
