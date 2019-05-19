@@ -3,7 +3,6 @@ import pygame
 import time
 import os
 import PIL.Image
-import cups
 import RPi.GPIO as GPIO
 
 from threading import Thread
@@ -25,7 +24,6 @@ imagecounter = 0
 imagefolder = 'Photos'
 templatePath = os.path.join('Photos', 'Template', "template.png") #Path of template image
 ImageShowed = False
-Printing = False
 BUTTON_PIN = 25
 #IMAGE_WIDTH = 558
 #IMAGE_HEIGHT = 374
@@ -314,7 +312,6 @@ def TakePictures():
         global ImageShowed
         global CountDownPhoto
 	global BackgroundColor
-	global Printing
 	global PhotosPerCart
 	global TotalImageCount
 
@@ -356,79 +353,14 @@ def TakePictures():
         time.sleep(1)
         Message = ""
         UpdateDisplay()
-        Printing = False
-        WaitForPrintingEvent()
         Numeral = ""
 	Message = ""
-	print(Printing)
-        if Printing:
-                if (TotalImageCount <= PhotosPerCart):
-                        if os.path.isfile('/home/pi/Desktop/tempprint.jpg'):
-                                # Open a connection to cups
-                                conn = cups.Connection()
-                                # get a list of printers
-                                printers = conn.getPrinters()
-                                # select printer 0
-                                printer_name = printers.keys()[0]
-                                Message = "Impression en cours..."
-                                UpdateDisplay()
-                                time.sleep(1)
-                                # print the buffer file
-                                printqueuelength = len(conn.getJobs())
-                                if printqueuelength > 1:
-                                        ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
-                                        conn.enablePrinter(printer_name)
-                                        Message = "Impression impossible"                
-                                        UpdateDisplay()
-                                        time.sleep(1)
-                                else:
-                                        conn.printFile(printer_name, '/home/pi/Desktop/tempprint.jpg', "PhotoBooth", {})
-                                        time.sleep(40)            
-                else:
-                        Message = "Nous vous enverrons vos photos"
-                        Numeral = ""
-                        UpdateDisplay()
-                        time.sleep(1)
-                
         Message = ""
         Numeral = ""
         ImageShowed = False
         UpdateDisplay()
         time.sleep(1)
 
-def MyCallback(channel):
-    global Printing
-    GPIO.remove_event_detect(BUTTON_PIN)
-    Printing=True
-	
-def WaitForPrintingEvent():
-    global BackgroundColor
-    global Numeral
-    global Message
-    global Printing
-    global pygame
-    countDown = 5
-    GPIO.add_event_detect(BUTTON_PIN, GPIO.RISING)
-    GPIO.add_event_callback(BUTTON_PIN, MyCallback)
-    
-    while Printing == False and countDown > 0:
-        if(Printing == True):
-            return
-        for event in pygame.event.get():			
-            if event.type == pygame.KEYDOWN:				
-                if event.key == pygame.K_DOWN:
-                    GPIO.remove_event_detect(BUTTON_PIN)
-                    Printing = True
-                    return        
-        BackgroundColor = ""
-        Numeral = str(countDown)
-        Message = ""
-        UpdateDisplay()        
-        countDown = countDown - 1
-        time.sleep(1)
-
-    GPIO.remove_event_detect(BUTTON_PIN)
-        
 	
 def WaitForEvent():
     global pygame
