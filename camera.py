@@ -121,28 +121,7 @@ def InitFolder(imagefolder):
     if not os.path.isdir(imagefolder2):
         os.makedirs(imagefolder2)
 
-
-def DisplayText(fontSize, textToDisplay, BackgroundColor = ""):
-    global screen
-    global background
-    global pygame
-    global screenPicture
-    global backgroundPicture
-
-    if (BackgroundColor != ""):
-        # print(BackgroundColor)
-        background.fill(pygame.Color("black"))
-    if (textToDisplay != ""):
-        # print(displaytext)
-        font = pygame.font.Font(None, fontSize)
-        text = font.render(textToDisplay, 1, (227, 157, 200))
-        textpos = text.get_rect()
-        textpos.centerx = background.get_rect().centerx
-        textpos.centery = background.get_rect().centery
-        background.blit(text, textpos)
-
-
-def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor = ""):
+def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor = "white"):
     # init global variables from main thread
     global screen
     global background
@@ -150,16 +129,8 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
     global screenPicture
     global backgroundPicture
 
-    background.fill(pygame.Color("white"))  # White background
-    # DisplayText(100, Message)
-    # DisplayText(800, Numeral)
-    # DisplayText(500, CountDownPhoto)
-
-    if (BackgroundColor != ""):
-        # print(BackgroundColor)
-        background.fill(pygame.Color("black"))
+    background.fill(pygame.Color(BackgroundColor))
     if (Message != ""):
-        # print(displaytext)
         font = pygame.font.Font(None, 100)
         text = font.render(Message, 1, (227, 157, 200))
         textpos = text.get_rect()
@@ -168,7 +139,6 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
         background.blit(text, textpos)
 
     if (Numeral != ""):
-        # print(displaytext)
         font = pygame.font.Font(None, 800)
         text = font.render(Numeral, 1, (227, 157, 200))
         textpos = text.get_rect()
@@ -177,7 +147,6 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
         background.blit(text, textpos)
 
     if (CountDownPhoto != ""):
-        # print(displaytext)
         font = pygame.font.Font(None, 500)
         text = font.render(CountDownPhoto, 1, (227, 157, 200))
         textpos = text.get_rect()
