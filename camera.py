@@ -13,7 +13,9 @@ from PIL import Image, ImageDraw
 # initialise global variables
 TotalImageCount = 0  # Counter for Display and to monitor paper usage
 imagecounter = 0
-IMAGE_FOLDER = 'Photos'
+PHOTO_FOLDER = 'Photos'
+FINALS_FOLDER = os.path.join(PHOTO_FOLDER, 'finals')
+IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
 templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
 BUTTON_PIN = 25
 IMAGE_WIDTH = 550
@@ -203,7 +205,7 @@ def CapturePicture(CountDownPhoto):
     UpdateDisplay()
     imagecounter = imagecounter + 1
     ts = time.time()
-    filename = os.path.join(IMAGE_FOLDER, 'images', str(imagecounter) + "_" + str(ts) + '.jpg')
+    filename = os.path.join(IMAGE_FOLDER, str(imagecounter) + "_" + str(ts) + '.jpg')
     camera.capture(filename, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
     camera.stop_preview()
     ShowPicture(filename, 2)
@@ -234,7 +236,7 @@ def TakePictures():
     bgimage.paste(image3, (55, 410))
     # Create the final filename
     ts = time.time()
-    Final_Image_Name = os.path.join(IMAGE_FOLDER, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
+    Final_Image_Name = os.path.join(FINALS_FOLDER, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
     # Save it to the usb drive
     bgimage.save(Final_Image_Name)
     UpdateDisplay()
@@ -260,7 +262,8 @@ def WaitForEvent():
 
 
 def main(threadName, *args):
-    InitFolder(os.path.join(IMAGE_FOLDER, 'images'))
+    InitFolder(IMAGE_FOLDER)
+    InitFolder(FINALS_FOLDER)
     while True:
         show_image('images/start_camera.jpg')
         WaitForEvent()
