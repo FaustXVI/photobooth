@@ -38,11 +38,8 @@ def create_screen():
     return s, b
 
 
-(screen, background) = create_screen()
-
-
-def create_camera(screen):
-    c = picamera.PiCamera(resolution=screen.get_size(),
+def create_camera(a_screen):
+    c = picamera.PiCamera(resolution=a_screen.get_size(),
                           framerate=30,
                           sensor_mode=5)
     c.rotation = 0
@@ -54,9 +51,6 @@ def create_camera(screen):
     return c
 
 
-camera = create_camera(screen)
-
-
 # A function to handle keyboard/mouse/device input events
 def check_escape(events):
     for event in events:  # Hit the ESC key to quit the slideshow.
@@ -65,15 +59,12 @@ def check_escape(events):
             pygame.quit()
 
 
-def init_folder(folder):
-    update_display(message='Folder Check...')
+def init_folder(screen, background, folder):
+    update_display(screen=screen, background=background, message='Folder Check...')
     os.makedirs(folder, exist_ok=True)
 
 
-def update_display(message="", background_color="white", size=100):
-    global screen
-    global background
-
+def update_display(screen, background, message="", background_color="white", size=100):
     background.fill(pygame.Color(background_color))
     if message != "":
         font = pygame.font.Font(None, size)
@@ -89,7 +80,7 @@ def update_display(message="", background_color="white", size=100):
     return
 
 
-def ShowPicture(file, delay):
+def ShowPicture(screen, background, file, delay):
     background.fill((0, 0, 0))
     img = pygame.image.load(file)
     img = pygame.transform.scale(img, screen.get_size())  # Make the image full screen
@@ -100,7 +91,7 @@ def ShowPicture(file, delay):
 
 
 # display one image on screen
-def show_image(image_path):
+def show_image(screen, background, image_path):
     screen.fill(pygame.Color("white"))  # clear the screen	
     img = pygame.image.load(image_path)  # load the image
     img = img.convert()
@@ -111,13 +102,11 @@ def show_image(image_path):
     pygame.display.flip()
 
 
-def CapturePicture(count_down_photo):
+def CapturePicture(screen, background, camera, count_down_photo):
     global imagecounter
-    global screen
-    global background
-    update_display(message=count_down_photo, size=500)
+    update_display(screen=screen, background=background, message=count_down_photo, size=500)
     time.sleep(1)
-    update_display()
+    update_display(screen=screen, background=background)
     background.fill(pygame.Color("black"))
     screen.blit(background, (0, 0))
     pygame.display.flip()
@@ -125,33 +114,30 @@ def CapturePicture(count_down_photo):
 
     for x in range(3, -1, -1):
         if x == 0:
-            update_display(message="PRENEZ LA POSE", background_color="black")
+            update_display(screen=screen, background=background, message="PRENEZ LA POSE", background_color="black")
         else:
-            update_display(message=str(x), background_color="black", size=800)
+            update_display(screen=screen, background=background, message=str(x), background_color="black", size=800)
         time.sleep(1)
 
-    update_display()
+    update_display(screen=screen, background=background)
     imagecounter = imagecounter + 1
     ts = time.time()
     filename = os.path.join(IMAGE_FOLDER, str(imagecounter) + "_" + str(ts) + '.jpg')
     camera.capture(filename)
     camera.stop_preview()
-    ShowPicture(filename, 2)
+    ShowPicture(screen, background, filename, 2)
     return filename
 
 
-def TakePictures():
-    global imagecounter
-    global screen
-    global background
+def TakePictures(screen, background, camera):
     global TotalImageCount
 
     check_escape(pygame.event.get())
-    filename1 = CapturePicture(count_down_photo="1/3")
-    filename2 = CapturePicture(count_down_photo="2/3")
-    filename3 = CapturePicture(count_down_photo="3/3")
+    filename1 = CapturePicture(screen=screen, background=background, camera=camera, count_down_photo="1/3")
+    filename2 = CapturePicture(screen=screen, background=background, camera=camera, count_down_photo="2/3")
+    filename3 = CapturePicture(screen=screen, background=background, camera=camera, count_down_photo="3/3")
 
-    update_display(message="Attendez svp...")
+    update_display(screen=screen, background=background, message="Attendez svp...")
 
     image1 = PIL.Image.open(filename1)
     image2 = PIL.Image.open(filename2)
@@ -167,7 +153,7 @@ def TakePictures():
     Final_Image_Name = os.path.join(FINALS_FOLDER, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
     # Save it to the usb drive
     bgimage.save(Final_Image_Name)
-    update_display()
+    update_display(screen=screen, background=background)
     time.sleep(1)
 
 
@@ -190,13 +176,15 @@ def WaitForEvent():
 
 
 def main(threadName, *args):
-    init_folder(IMAGE_FOLDER)
-    init_folder(FINALS_FOLDER)
+    (screen, background) = create_screen()
+    camera = create_camera(screen)
+    init_folder(screen, background, IMAGE_FOLDER)
+    init_folder(screen, background, FINALS_FOLDER)
     while True:
-        show_image('images/start_camera.jpg')
+        show_image(screen, background, 'images/start_camera.jpg')
         WaitForEvent()
         time.sleep(0.2)
-        TakePictures()
+        TakePictures(screen, background, camera)
     GPIO.cleanup()
 
 
