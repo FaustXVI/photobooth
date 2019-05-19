@@ -39,7 +39,9 @@ screen_dimensions = (screen_info.current_w, screen_info.current_h)
 screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
 background = pygame.Surface(screen.get_size()).convert()
 
-camera =  picamera.PiCamera(resolution=screen_dimensions, framerate=15,sensor_mode=5)
+camera = picamera.PiCamera(resolution=screen_dimensions,
+                           framerate=30,
+                           sensor_mode=1)
 # Initialise the camera object
 camera.rotation = 0
 camera.hflip = True
@@ -71,11 +73,13 @@ def input(events):
                 (event.type == KEYDOWN and event.key == K_ESCAPE)):
             pygame.quit()
 
+
 def InitFolder(imagefolder):
-    UpdateDisplay(Message = 'Folder Check...')
+    UpdateDisplay(Message='Folder Check...')
     os.makedirs(imagefolder, exist_ok=True)
 
-def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor = "white"):
+
+def UpdateDisplay(Message="", Numeral="", CountDownPhoto="", BackgroundColor="white"):
     # init global variables from main thread
     global screen
     global background
@@ -136,7 +140,7 @@ def CapturePicture(CountDownPhoto):
     global imagecounter
     global screen
     global background
-    UpdateDisplay(CountDownPhoto= CountDownPhoto)
+    UpdateDisplay(CountDownPhoto=CountDownPhoto)
     time.sleep(1)
     UpdateDisplay()
     background.fill(pygame.Color("black"))
@@ -146,9 +150,9 @@ def CapturePicture(CountDownPhoto):
 
     for x in range(3, -1, -1):
         if x == 0:
-            UpdateDisplay(Message="PRENEZ LA POSE", BackgroundColor = "black")
+            UpdateDisplay(Message="PRENEZ LA POSE", BackgroundColor="black")
         else:
-            UpdateDisplay(Numeral = str(x), BackgroundColor = "black")
+            UpdateDisplay(Numeral=str(x), BackgroundColor="black")
         time.sleep(1)
 
     UpdateDisplay()
@@ -168,11 +172,11 @@ def TakePictures():
     global TotalImageCount
 
     input(pygame.event.get())
-    filename1 = CapturePicture(CountDownPhoto = "1/3")
-    filename2 = CapturePicture(CountDownPhoto = "2/3")
-    filename3 = CapturePicture(CountDownPhoto = "3/3")
+    filename1 = CapturePicture(CountDownPhoto="1/3")
+    filename2 = CapturePicture(CountDownPhoto="2/3")
+    filename3 = CapturePicture(CountDownPhoto="3/3")
 
-    UpdateDisplay(Message = "Attendez svp...")
+    UpdateDisplay(Message="Attendez svp...")
 
     image1 = PIL.Image.open(filename1)
     image2 = PIL.Image.open(filename2)
