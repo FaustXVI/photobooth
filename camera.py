@@ -34,21 +34,22 @@ GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 # initialise pygame
 pygame.init()  # Initialise pygame
 pygame.mouse.set_visible(False)  # hide the mouse cursor
-infoObject = pygame.display.Info()
-screen = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)  # Full screen 
-background = pygame.Surface(screen.get_size())  # Create the background object
-background = background.convert()  # Convert it to a background
 
-screenPicture = pygame.display.set_mode((infoObject.current_w, infoObject.current_h), pygame.FULLSCREEN)  # Full screen
-backgroundPicture = pygame.Surface(screenPicture.get_size())  # Create the background object
-backgroundPicture = background.convert()  # Convert it to a background
+screen_info = pygame.display.Info()
+screen_width = screen_info.current_w
+screen_height = screen_info.current_h
+screen_dimensions = (screen_width,screen_height)
 
-transform_x = infoObject.current_w  # how wide to scale the jpg when replaying
-transfrom_y = infoObject.current_h  # how high to scale the jpg when replaying
+screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN) 
+background = pygame.Surface(screen.get_size()).convert()
+
+screenPicture = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
+backgroundPicture = pygame.Surface(screenPicture.get_size()).convert()
+
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-camera.resolution = (infoObject.current_w, infoObject.current_h)
+camera.resolution = (screen_info.current_w, screen_info.current_h)
 camera.rotation = 0
 camera.hflip = True
 camera.vflip = False
@@ -86,30 +87,30 @@ def set_demensions(img_w, img_h):
     # When running in terminal, the size is not correct (it displays small). Why?
 
     # connect to global vars
-    global transform_y, transform_x, offset_y, offset_x
+    global screen_height, screen_width, offset_y, offset_x
 
     # based on output screen resolution, calculate how to display
-    ratio_h = (infoObject.current_w * img_h) / img_w
+    ratio_h = (screen_info.current_w * img_h) / img_w
 
-    if (ratio_h < infoObject.current_h):
+    if (ratio_h < screen_info.current_h):
         # Use horizontal black bars
         # print "horizontal black bars"
-        transform_y = ratio_h
-        transform_x = infoObject.current_w
-        offset_y = (infoObject.current_h - ratio_h) / 2
+        screen_height = ratio_h
+        screen_width = screen_info.current_w
+        offset_y = (screen_info.current_h - ratio_h) / 2
         offset_x = 0
-    elif (ratio_h > infoObject.current_h):
+    elif (ratio_h > screen_info.current_h):
         # Use vertical black bars
         # print "vertical black bars"
-        transform_x = (infoObject.current_h * img_w) / img_h
-        transform_y = infoObject.current_h
-        offset_x = (infoObject.current_w - transform_x) / 2
+        screen_width = (screen_info.current_h * img_w) / img_h
+        screen_height = screen_info.current_h
+        offset_x = (screen_info.current_w - screen_width) / 2
         offset_y = 0
     else:
         # No need for black bars as photo ratio equals screen ratio
         # print "no black bars"
-        transform_x = infoObject.current_w
-        transform_y = infoObject.current_h
+        screen_width = screen_info.current_w
+        screen_height = screen_info.current_h
         offset_y = offset_x = 0
 
 
@@ -176,8 +177,8 @@ def show_image(image_path):
     img = pygame.image.load(image_path)  # load the image
     img = img.convert()
     set_demensions(img.get_width(), img.get_height())  # set pixel dimensions based on image	
-    x = (infoObject.current_w / 2) - (img.get_width() / 2)
-    y = (infoObject.current_h / 2) - (img.get_height() / 2)
+    x = (screen_info.current_w / 2) - (img.get_width() / 2)
+    y = (screen_info.current_h / 2) - (img.get_height() / 2)
     screen.blit(img, (x, y))
     pygame.display.flip()
 
