@@ -115,7 +115,8 @@ def capture_picture(screen, background, camera, count_down_photo, image_number):
 
 def take_pictures(screen, background, camera):
     for i in range(1, 3):
-        capture_picture(screen=screen, background=background, camera=camera, count_down_photo=f'{i}/3', image_number=i)
+        capture_picture(screen=screen, background=background, camera=camera, count_down_photo=str(i) + '/3',
+                        image_number=i)
 
 
 def wait_for_event():
