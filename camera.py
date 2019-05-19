@@ -11,10 +11,6 @@ from time import sleep
 from PIL import Image, ImageDraw
 
 # initialise global variables
-Numeral = ""  # Numeral is the number display
-Message = ""  # Message is a fullscreen message
-BackgroundColor = ""
-CountDownPhoto = ""
 CountPhotoOnCart = ""
 SmallMessage = ""  # SmallMessage is a lower banner message
 TotalImageCount = 0  # Counter for Display and to monitor paper usage
@@ -116,14 +112,8 @@ def set_demensions(img_w, img_h):
         offset_y = offset_x = 0
 
 
-def InitFolder():
-    global imagefolder
-    global Message
-
-    Message = 'Folder Check...'
-    UpdateDisplay()
-    Message = ''
-
+def InitFolder(imagefolder):
+    UpdateDisplay(Message = 'Folder Check...')
     # check image folder existing, create if not exists
     if not os.path.isdir(imagefolder):
         os.makedirs(imagefolder)
@@ -133,16 +123,13 @@ def InitFolder():
         os.makedirs(imagefolder2)
 
 
-def DisplayText(fontSize, textToDisplay):
-    global Numeral
-    global Message
+def DisplayText(fontSize, textToDisplay, BackgroundColor = ""):
     global screen
     global background
     global pygame
     global ImageShowed
     global screenPicture
     global backgroundPicture
-    global CountDownPhoto
 
     if (BackgroundColor != ""):
         # print(BackgroundColor)
@@ -160,17 +147,14 @@ def DisplayText(fontSize, textToDisplay):
             background.blit(text, textpos)
 
 
-def UpdateDisplay():
+def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor = ""):
     # init global variables from main thread
-    global Numeral
-    global Message
     global screen
     global background
     global pygame
     global ImageShowed
     global screenPicture
     global backgroundPicture
-    global CountDownPhoto
 
     background.fill(pygame.Color("white"))  # White background
     # DisplayText(100, Message)
@@ -253,46 +237,31 @@ def show_image(image_path):
     pygame.display.flip()
 
 
-def CapturePicture():
+def CapturePicture(CountDownPhoto):
     global imagecounter
     global imagefolder
-    global Numeral
-    global Message
     global screen
     global background
     global screenPicture
     global backgroundPicture
     global pygame
     global ImageShowed
-    global CountDownPhoto
-    global BackgroundColor
-
-    BackgroundColor = ""
-    Numeral = ""
-    Message = ""
-    UpdateDisplay()
+    UpdateDisplay(CountDownPhoto= CountDownPhoto)
     time.sleep(1)
-    CountDownPhoto = ""
     UpdateDisplay()
     background.fill(pygame.Color("black"))
     screen.blit(background, (0, 0))
     pygame.display.flip()
     camera.start_preview()
-    BackgroundColor = "black"
 
     for x in range(3, -1, -1):
         if x == 0:
-            Numeral = ""
-            Message = "PRENEZ LA POSE"
+            UpdateDisplay(Message="PRENEZ LA POSE", BackgroundColor = "black")
         else:
-            Numeral = str(x)
-            Message = ""
-        UpdateDisplay()
+            UpdateDisplay(Numeral = str(x), BackgroundColor = "black")
+        
         time.sleep(1)
 
-    BackgroundColor = ""
-    Numeral = ""
-    Message = ""
     UpdateDisplay()
     imagecounter = imagecounter + 1
     ts = time.time()
@@ -307,30 +276,19 @@ def CapturePicture():
 def TakePictures():
     global imagecounter
     global imagefolder
-    global Numeral
-    global Message
     global screen
     global background
     global pygame
     global ImageShowed
-    global CountDownPhoto
-    global BackgroundColor
     global PhotosPerCart
     global TotalImageCount
 
     input(pygame.event.get())
-    CountDownPhoto = "1/3"
-    filename1 = CapturePicture()
+    filename1 = CapturePicture(CountDownPhoto = "1/3")
+    filename2 = CapturePicture(CountDownPhoto = "2/3")
+    filename3 = CapturePicture(CountDownPhoto = "3/3")
 
-    CountDownPhoto = "2/3"
-    filename2 = CapturePicture()
-
-    CountDownPhoto = "3/3"
-    filename3 = CapturePicture()
-
-    CountDownPhoto = ""
-    Message = "Attendez svp..."
-    UpdateDisplay()
+    UpdateDisplay(Message = "Attendez svp...")
 
     image1 = PIL.Image.open(filename1)
     image2 = PIL.Image.open(filename2)
@@ -369,7 +327,8 @@ def WaitForEvent():
 
 
 def main(threadName, *args):
-    InitFolder()
+    global imagefolder
+    InitFolder(imagefolder)
     while True:
         show_image('images/start_camera.jpg')
         WaitForEvent()
