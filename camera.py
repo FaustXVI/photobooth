@@ -18,7 +18,6 @@ PhotosPerCart = 30  # Selphy takes 16 sheets per tray
 imagecounter = 0
 imagefolder = 'Photos'
 templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
-ImageShowed = False
 BUTTON_PIN = 25
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
@@ -127,7 +126,6 @@ def DisplayText(fontSize, textToDisplay, BackgroundColor = ""):
     global screen
     global background
     global pygame
-    global ImageShowed
     global screenPicture
     global backgroundPicture
 
@@ -141,10 +139,7 @@ def DisplayText(fontSize, textToDisplay, BackgroundColor = ""):
         textpos = text.get_rect()
         textpos.centerx = background.get_rect().centerx
         textpos.centery = background.get_rect().centery
-        if (ImageShowed):
-            backgroundPicture.blit(text, textpos)
-        else:
-            background.blit(text, textpos)
+        background.blit(text, textpos)
 
 
 def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor = ""):
@@ -152,7 +147,6 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
     global screen
     global background
     global pygame
-    global ImageShowed
     global screenPicture
     global backgroundPicture
 
@@ -171,10 +165,7 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
         textpos = text.get_rect()
         textpos.centerx = background.get_rect().centerx
         textpos.centery = background.get_rect().centery
-        if (ImageShowed):
-            backgroundPicture.blit(text, textpos)
-        else:
-            background.blit(text, textpos)
+        background.blit(text, textpos)
 
     if (Numeral != ""):
         # print(displaytext)
@@ -183,10 +174,7 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
         textpos = text.get_rect()
         textpos.centerx = background.get_rect().centerx
         textpos.centery = background.get_rect().centery
-        if (ImageShowed):
-            backgroundPicture.blit(text, textpos)
-        else:
-            background.blit(text, textpos)
+        background.blit(text, textpos)
 
     if (CountDownPhoto != ""):
         # print(displaytext)
@@ -195,15 +183,9 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
         textpos = text.get_rect()
         textpos.centerx = background.get_rect().centerx
         textpos.centery = background.get_rect().centery
-        if (ImageShowed):
-            backgroundPicture.blit(text, textpos)
-        else:
-            background.blit(text, textpos)
+        background.blit(text, textpos)
 
-    if (ImageShowed == True):
-        screenPicture.blit(backgroundPicture, (0, 0))
-    else:
-        screen.blit(background, (0, 0))
+    screen.blit(background, (0, 0))
 
     pygame.display.flip()
     return
@@ -213,7 +195,6 @@ def ShowPicture(file, delay):
     global pygame
     global screenPicture
     global backgroundPicture
-    global ImageShowed
     backgroundPicture.fill((0, 0, 0))
     img = pygame.image.load(file)
     img = pygame.transform.scale(img, screenPicture.get_size())  # Make the image full screen
@@ -221,7 +202,6 @@ def ShowPicture(file, delay):
     backgroundPicture.blit(img, (0, 0))
     screen.blit(backgroundPicture, (0, 0))
     pygame.display.flip()  # update the display
-    ImageShowed = True
     time.sleep(delay)
 
 
@@ -245,7 +225,6 @@ def CapturePicture(CountDownPhoto):
     global screenPicture
     global backgroundPicture
     global pygame
-    global ImageShowed
     UpdateDisplay(CountDownPhoto= CountDownPhoto)
     time.sleep(1)
     UpdateDisplay()
@@ -269,7 +248,6 @@ def CapturePicture(CountDownPhoto):
     camera.capture(filename, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
     camera.stop_preview()
     ShowPicture(filename, 2)
-    ImageShowed = False
     return filename
 
 
@@ -279,7 +257,6 @@ def TakePictures():
     global screen
     global background
     global pygame
-    global ImageShowed
     global PhotosPerCart
     global TotalImageCount
 
@@ -303,7 +280,6 @@ def TakePictures():
     Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
     # Save it to the usb drive
     bgimage.save(Final_Image_Name)
-    ImageShowed = False
     UpdateDisplay()
     time.sleep(1)
 
