@@ -43,8 +43,8 @@ screen_dimensions = (screen_width,screen_height)
 screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN) 
 background = pygame.Surface(screen.get_size()).convert()
 
-screenPicture = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
-backgroundPicture = pygame.Surface(screenPicture.get_size()).convert()
+screenPicture = screen
+backgroundPicture = background
 
 
 camera = picamera.PiCamera()
