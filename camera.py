@@ -11,17 +11,17 @@ from time import sleep
 from PIL import Image, ImageDraw
 
 # initialise global variables
-TotalImageCount = 0  # Counter for Display and to monitor paper usage
+TotalImageCount = 0
 imagecounter = 0
 PHOTO_FOLDER = 'Photos'
 FINALS_FOLDER = os.path.join(PHOTO_FOLDER, 'finals')
 IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
-templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
 BUTTON_PIN = 25
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
 
 # Load the background template
+templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
 bgimage = PIL.Image.open(templatePath)
 
 # Setup GPIO
