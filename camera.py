@@ -13,7 +13,7 @@ from PIL import Image, ImageDraw
 # initialise global variables
 TotalImageCount = 0  # Counter for Display and to monitor paper usage
 imagecounter = 0
-imagefolder = 'Photos'
+IMAGE_FOLDER = 'Photos'
 templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
 BUTTON_PIN = 25
 IMAGE_WIDTH = 550
@@ -110,13 +110,7 @@ def set_demensions(img_w, img_h):
 
 def InitFolder(imagefolder):
     UpdateDisplay(Message = 'Folder Check...')
-    # check image folder existing, create if not exists
-    if not os.path.isdir(imagefolder):
-        os.makedirs(imagefolder)
-
-    imagefolder2 = os.path.join(imagefolder, 'images')
-    if not os.path.isdir(imagefolder2):
-        os.makedirs(imagefolder2)
+    os.makedirs(imagefolder, exist_ok=True)
 
 def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor = "white"):
     # init global variables from main thread
@@ -185,7 +179,6 @@ def show_image(image_path):
 
 def CapturePicture(CountDownPhoto):
     global imagecounter
-    global imagefolder
     global screen
     global background
     global screenPicture
@@ -210,7 +203,7 @@ def CapturePicture(CountDownPhoto):
     UpdateDisplay()
     imagecounter = imagecounter + 1
     ts = time.time()
-    filename = os.path.join(imagefolder, 'images', str(imagecounter) + "_" + str(ts) + '.jpg')
+    filename = os.path.join(IMAGE_FOLDER, 'images', str(imagecounter) + "_" + str(ts) + '.jpg')
     camera.capture(filename, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
     camera.stop_preview()
     ShowPicture(filename, 2)
@@ -219,7 +212,6 @@ def CapturePicture(CountDownPhoto):
 
 def TakePictures():
     global imagecounter
-    global imagefolder
     global screen
     global background
     global pygame
@@ -242,7 +234,7 @@ def TakePictures():
     bgimage.paste(image3, (55, 410))
     # Create the final filename
     ts = time.time()
-    Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
+    Final_Image_Name = os.path.join(IMAGE_FOLDER, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
     # Save it to the usb drive
     bgimage.save(Final_Image_Name)
     UpdateDisplay()
@@ -268,8 +260,7 @@ def WaitForEvent():
 
 
 def main(threadName, *args):
-    global imagefolder
-    InitFolder(imagefolder)
+    InitFolder(os.path.join(IMAGE_FOLDER, 'images'))
     while True:
         show_image('images/start_camera.jpg')
         WaitForEvent()
