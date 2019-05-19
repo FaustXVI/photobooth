@@ -41,14 +41,12 @@ background = pygame.Surface(screen.get_size()).convert()
 
 camera = picamera.PiCamera()
 # Initialise the camera object
-camera.resolution = (screen_info.current_w, screen_info.current_h)
 camera.rotation = 0
 camera.hflip = True
 camera.vflip = False
 camera.brightness = 50
 camera.preview_alpha = 120
 camera.preview_fullscreen = True
-camera.resolution = (1920,1080)
 
 
 # camera.framerate             = 24
@@ -157,7 +155,7 @@ def CapturePicture(CountDownPhoto):
     imagecounter = imagecounter + 1
     ts = time.time()
     filename = os.path.join(IMAGE_FOLDER, str(imagecounter) + "_" + str(ts) + '.jpg')
-    camera.capture(filename, resize=(IMAGE_WIDTH, IMAGE_HEIGHT))
+    camera.capture(filename)
     camera.stop_preview()
     ShowPicture(filename, 2)
     return filename
