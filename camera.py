@@ -44,7 +44,7 @@ def create_screen():
 def create_camera(screen):
     c = picamera.PiCamera(resolution=screen.get_size(),
                           framerate=30,
-                          sensor_mode=1)
+                          sensor_mode=5)
     c.rotation = 0
     c.hflip = True
     c.vflip = False
