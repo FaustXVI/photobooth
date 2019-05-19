@@ -342,21 +342,6 @@ def TakePictures():
         Final_Image_Name = os.path.join(imagefolder, "Final_" + str(TotalImageCount)+"_"+str(ts) + ".jpg")
         # Save it to the usb drive
         bgimage.save(Final_Image_Name)
-        # Save a temp file, its faster to print from the pi than usb
-        bgimage.save('/home/pi/Desktop/tempprint.jpg')
-        ShowPicture('/home/pi/Desktop/tempprint.jpg',3)
-        bgimage2 = bgimage.rotate(90)
-        bgimage2.save('/home/pi/Desktop/tempprint.jpg')
-        ImageShowed = False
-        Message = "Appuyez sur le bouton pour imprimer"
-        UpdateDisplay()
-        time.sleep(1)
-        Message = ""
-        UpdateDisplay()
-        Numeral = ""
-	Message = ""
-        Message = ""
-        Numeral = ""
         ImageShowed = False
         UpdateDisplay()
         time.sleep(1)
