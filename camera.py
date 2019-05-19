@@ -10,9 +10,6 @@ from pygame.locals import *
 from time import sleep
 from PIL import Image, ImageDraw
 
-# initialise global variables
-TotalImageCount = 0
-imagecounter = 0
 PHOTO_FOLDER = 'Photos'
 FINALS_FOLDER = os.path.join(PHOTO_FOLDER, 'finals')
 IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
@@ -24,46 +21,40 @@ TEMPLATE_TOP_RIGHT = (625, 30)
 TEMPLATE_BOTTOM_LEFT = (55, 410)
 TEMPLATE_BOTTOM_RIGHT = (625, 410)
 
-# Load the background template
-bgimage = PIL.Image.open(os.path.join(TEMPLATE_FOLDER, "template.png"))
-
-# Setup GPIO
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-pygame.init()
-pygame.mouse.set_visible(False)
-screen_info = pygame.display.Info()
-screen_dimensions = (screen_info.current_w, screen_info.current_h)
-
-screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
-background = pygame.Surface(screen.get_size()).convert()
-
-camera = picamera.PiCamera(resolution=screen_dimensions,
-                           framerate=30,
-                           sensor_mode=1)
-# Initialise the camera object
-camera.rotation = 0
-camera.hflip = True
-camera.vflip = False
-camera.brightness = 50
-camera.preview_alpha = 120
-camera.preview_fullscreen = True
+TotalImageCount = 0
+imagecounter = 0
 
 
-# camera.framerate             = 24
-# camera.sharpness             = 0
-# camera.contrast              = 8
-# camera.saturation            = 0
-# camera.ISO                   = 0
-# camera.video_stabilization   = False
-# camera.exposure_compensation = 0
-# camera.exposure_mode         = 'auto'
-# camera.meter_mode            = 'average'
-# camera.awb_mode              = 'auto'
-# camera.image_effect          = 'none'
-# camera.color_effects         = None
-# camera.crop                  = (0.0, 0.0, 1.0, 1.0)
+def create_screen():
+    pygame.init()
+    pygame.mouse.set_visible(False)
+    screen_info = pygame.display.Info()
+    screen_dimensions = (screen_info.current_w, screen_info.current_h)
+    s = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
+    b = pygame.Surface(s.get_size()).convert()
+    return s, b
+
+
+(screen, background) = create_screen()
+
+
+def create_camera(screen):
+    c = picamera.PiCamera(resolution=screen.get_size(),
+                          framerate=30,
+                          sensor_mode=1)
+    c.rotation = 0
+    c.hflip = True
+    c.vflip = False
+    c.brightness = 50
+    c.preview_alpha = 120
+    c.preview_fullscreen = True
+    return c
+
+
+camera = create_camera(screen)
 
 
 # A function to handle keyboard/mouse/device input events
@@ -183,6 +174,7 @@ def TakePictures():
     image3 = PIL.Image.open(filename3)
     TotalImageCount = TotalImageCount + 1
 
+    bgimage = PIL.Image.open(os.path.join(TEMPLATE_FOLDER, "template.png"))
     bgimage.paste(image1, TEMPLATE_TOP_RIGHT)
     bgimage.paste(image2, TEMPLATE_BOTTOM_RIGHT)
     bgimage.paste(image3, TEMPLATE_BOTTOM_LEFT)
