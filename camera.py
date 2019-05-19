@@ -31,16 +31,12 @@ bgimage = PIL.Image.open(os.path.join(TEMPLATE_FOLDER, "template.png"))
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-# initialise pygame
-pygame.init()  # Initialise pygame
-pygame.mouse.set_visible(False)  # hide the mouse cursor
-
+pygame.init()
+pygame.mouse.set_visible(False)
 screen_info = pygame.display.Info()
-screen_width = screen_info.current_w
-screen_height = screen_info.current_h
-screen_dimensions = (screen_width,screen_height)
+screen_dimensions = (screen_info.current_w, screen_info.current_h)
 
-screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN) 
+screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
 background = pygame.Surface(screen.get_size()).convert()
 
 camera = picamera.PiCamera()
@@ -76,35 +72,6 @@ def input(events):
                 (event.type == KEYDOWN and event.key == K_ESCAPE)):
             pygame.quit()
 
-
-# set variables to properly display the image on screen at right ratio
-def set_demensions(img_w, img_h):
-    # Note this only works when in booting in desktop mode. 
-    # When running in terminal, the size is not correct (it displays small). Why?
-
-    # connect to global vars
-    global screen_height, screen_width
-
-    # based on output screen resolution, calculate how to display
-    ratio_h = (screen_info.current_w * img_h) / img_w
-
-    if ratio_h < screen_info.current_h:
-        # Use horizontal black bars
-        # print "horizontal black bars"
-        screen_height = ratio_h
-        screen_width = screen_info.current_w
-    elif ratio_h > screen_info.current_h:
-        # Use vertical black bars
-        # print "vertical black bars"
-        screen_width = (screen_info.current_h * img_w) / img_h
-        screen_height = screen_info.current_h
-    else:
-        # No need for black bars as photo ratio equals screen ratio
-        # print "no black bars"
-        screen_width = screen_info.current_w
-        screen_height = screen_info.current_h
-
-
 def InitFolder(imagefolder):
     UpdateDisplay(Message = 'Folder Check...')
     os.makedirs(imagefolder, exist_ok=True)
@@ -113,8 +80,6 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
     # init global variables from main thread
     global screen
     global background
-    global pygame
-    global backgroundPicture
 
     background.fill(pygame.Color(BackgroundColor))
     if (Message != ""):
@@ -148,11 +113,9 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
 
 
 def ShowPicture(file, delay):
-    global pygame
     background.fill((0, 0, 0))
     img = pygame.image.load(file)
     img = pygame.transform.scale(img, screen.get_size())  # Make the image full screen
-    # backgroundPicture.set_alpha(200)
     background.blit(img, (0, 0))
     screen.blit(background, (0, 0))
     pygame.display.flip()  # update the display
@@ -164,7 +127,6 @@ def show_image(image_path):
     screen.fill(pygame.Color("white"))  # clear the screen	
     img = pygame.image.load(image_path)  # load the image
     img = img.convert()
-    #set_demensions(img.get_width(), img.get_height())  # set pixel dimensions based on image	
     x = (screen_info.current_w / 2) - (img.get_width() / 2)
     y = (screen_info.current_h / 2) - (img.get_height() / 2)
     screen.blit(img, (x, y))
@@ -175,7 +137,6 @@ def CapturePicture(CountDownPhoto):
     global imagecounter
     global screen
     global background
-    global pygame
     UpdateDisplay(CountDownPhoto= CountDownPhoto)
     time.sleep(1)
     UpdateDisplay()
@@ -189,7 +150,6 @@ def CapturePicture(CountDownPhoto):
             UpdateDisplay(Message="PRENEZ LA POSE", BackgroundColor = "black")
         else:
             UpdateDisplay(Numeral = str(x), BackgroundColor = "black")
-        
         time.sleep(1)
 
     UpdateDisplay()
@@ -206,7 +166,6 @@ def TakePictures():
     global imagecounter
     global screen
     global background
-    global pygame
     global TotalImageCount
 
     input(pygame.event.get())
