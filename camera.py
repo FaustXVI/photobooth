@@ -16,13 +16,16 @@ imagecounter = 0
 PHOTO_FOLDER = 'Photos'
 FINALS_FOLDER = os.path.join(PHOTO_FOLDER, 'finals')
 IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
+TEMPLATE_FOLDER = os.path.join(PHOTO_FOLDER, 'Template')
 BUTTON_PIN = 25
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
+TEMPLATE_TOP_RIGHT = (625, 30)
+TEMPLATE_BOTTOM_LEFT = (55, 410)
+TEMPLATE_BOTTOM_RIGHT = (625, 410)
 
 # Load the background template
-templatePath = os.path.join('Photos', 'Template', "template.png")  # Path of template image
-bgimage = PIL.Image.open(templatePath)
+bgimage = PIL.Image.open(os.path.join(TEMPLATE_FOLDER, "template.png"))
 
 # Setup GPIO
 GPIO.setmode(GPIO.BCM)
@@ -231,9 +234,9 @@ def TakePictures():
     image3 = PIL.Image.open(filename3)
     TotalImageCount = TotalImageCount + 1
 
-    bgimage.paste(image1, (625, 30))
-    bgimage.paste(image2, (625, 410))
-    bgimage.paste(image3, (55, 410))
+    bgimage.paste(image1, TEMPLATE_TOP_RIGHT)
+    bgimage.paste(image2, TEMPLATE_BOTTOM_RIGHT)
+    bgimage.paste(image3, TEMPLATE_BOTTOM_LEFT)
     # Create the final filename
     ts = time.time()
     Final_Image_Name = os.path.join(FINALS_FOLDER, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
