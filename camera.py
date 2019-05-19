@@ -121,8 +121,9 @@ def show_image(image_path):
     screen.fill(pygame.Color("white"))  # clear the screen	
     img = pygame.image.load(image_path)  # load the image
     img = img.convert()
-    x = (screen_info.current_w / 2) - (img.get_width() / 2)
-    y = (screen_info.current_h / 2) - (img.get_height() / 2)
+    (screen_width,screen_height) = screen.get_size()
+    x = (screen_width / 2) - (img.get_width() / 2)
+    y = (screen_height / 2) - (img.get_height() / 2)
     screen.blit(img, (x, y))
     pygame.display.flip()
 
