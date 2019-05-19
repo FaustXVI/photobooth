@@ -132,7 +132,6 @@ def CapturePicture(screen, background, camera, count_down_photo):
 def TakePictures(screen, background, camera):
     global TotalImageCount
 
-    check_escape(pygame.event.get())
     filename1 = CapturePicture(screen=screen, background=background, camera=camera, count_down_photo="1/3")
     filename2 = CapturePicture(screen=screen, background=background, camera=camera, count_down_photo="2/3")
     filename3 = CapturePicture(screen=screen, background=background, camera=camera, count_down_photo="3/3")
