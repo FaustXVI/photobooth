@@ -11,7 +11,6 @@ from time import sleep
 from PIL import Image, ImageDraw
 
 PHOTO_FOLDER = 'Photos'
-FINALS_FOLDER = os.path.join(PHOTO_FOLDER, 'finals')
 IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
 TEMPLATE_FOLDER = os.path.join(PHOTO_FOLDER, 'Template')
 BUTTON_PIN = 25
@@ -24,7 +23,6 @@ TEMPLATE_BOTTOM_RIGHT = (625, 410)
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-TotalImageCount = 0
 imagecounter = 0
 
 
@@ -122,30 +120,9 @@ def capture_picture(screen, background, camera, count_down_photo):
 
 
 def take_pictures(screen, background, camera):
-    global TotalImageCount
-
-    filename1 = capture_picture(screen=screen, background=background, camera=camera, count_down_photo="1/3")
-    filename2 = capture_picture(screen=screen, background=background, camera=camera, count_down_photo="2/3")
-    filename3 = capture_picture(screen=screen, background=background, camera=camera, count_down_photo="3/3")
-
-    update_display(screen=screen, background=background, message="Attendez svp...")
-
-    image1 = PIL.Image.open(filename1)
-    image2 = PIL.Image.open(filename2)
-    image3 = PIL.Image.open(filename3)
-    TotalImageCount = TotalImageCount + 1
-
-    bgimage = PIL.Image.open(os.path.join(TEMPLATE_FOLDER, "template.png"))
-    bgimage.paste(image1, TEMPLATE_TOP_RIGHT)
-    bgimage.paste(image2, TEMPLATE_BOTTOM_RIGHT)
-    bgimage.paste(image3, TEMPLATE_BOTTOM_LEFT)
-    # Create the final filename
-    ts = time.time()
-    Final_Image_Name = os.path.join(FINALS_FOLDER, "Final_" + str(TotalImageCount) + "_" + str(ts) + ".jpg")
-    # Save it to the usb drive
-    bgimage.save(Final_Image_Name)
-    update_display(screen=screen, background=background)
-    time.sleep(1)
+    capture_picture(screen=screen, background=background, camera=camera, count_down_photo="1/3")
+    capture_picture(screen=screen, background=background, camera=camera, count_down_photo="2/3")
+    capture_picture(screen=screen, background=background, camera=camera, count_down_photo="3/3")
 
 
 def wait_for_event():
@@ -170,7 +147,6 @@ def main(threadName, *args):
     (screen, background) = create_screen()
     with create_camera(screen) as camera:
         init_folder(screen, background, IMAGE_FOLDER)
-        init_folder(screen, background, FINALS_FOLDER)
         while True:
             show_image(screen, background, 'images/start_camera.jpg')
             wait_for_event()
