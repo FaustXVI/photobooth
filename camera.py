@@ -21,8 +21,6 @@ IMAGE_HEIGHT = 360
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-imagecounter = 0
-
 
 def create_screen():
     pygame.init()
@@ -34,7 +32,7 @@ def create_screen():
     return s, b
 
 
-def create_camera(a_screen):
+def create_camera():
     c = picamera.PiCamera(resolution=HD_RESOLUTION,
                           framerate=30,
                           sensor_mode=5)
@@ -90,8 +88,7 @@ def show_image(screen, background, image_path):
     pygame.display.flip()
 
 
-def capture_picture(screen, background, camera, count_down_photo):
-    global imagecounter
+def capture_picture(screen, background, camera, count_down_photo, image_number):
     update_display(screen=screen, background=background, message=count_down_photo, size=500)
     time.sleep(1)
     update_display(screen=screen, background=background)
@@ -108,9 +105,8 @@ def capture_picture(screen, background, camera, count_down_photo):
         time.sleep(1)
 
     update_display(screen=screen, background=background)
-    imagecounter = imagecounter + 1
     ts = time.time()
-    filename = os.path.join(IMAGE_FOLDER, str(imagecounter) + "_" + str(ts) + '.jpg')
+    filename = os.path.join(IMAGE_FOLDER, str(image_number) + "_" + str(ts) + '.jpg')
     camera.capture(filename)
     camera.stop_preview()
     show_picture(screen, background, filename, 2)
@@ -118,32 +114,31 @@ def capture_picture(screen, background, camera, count_down_photo):
 
 
 def take_pictures(screen, background, camera):
-    capture_picture(screen=screen, background=background, camera=camera, count_down_photo="1/3")
-    capture_picture(screen=screen, background=background, camera=camera, count_down_photo="2/3")
-    capture_picture(screen=screen, background=background, camera=camera, count_down_photo="3/3")
+    for i in range(1, 3):
+        capture_picture(screen=screen, background=background, camera=camera, count_down_photo=f'{i}/3', image_number=i)
 
 
 def wait_for_event():
     global pygame
-    NotEvent = True
-    while NotEvent:
+    no_event = True
+    while no_event:
         input_state = GPIO.input(BUTTON_PIN)
-        if input_state == False:
-            NotEvent = False
+        if not input_state:
+            no_event = False
             return
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     pygame.quit()
                 if event.key == pygame.K_DOWN:
-                    NotEvent = False
+                    no_event = False
                     return
         time.sleep(0.2)
 
 
 def main(threadName, *args):
     (screen, background) = create_screen()
-    with create_camera(screen) as camera:
+    with create_camera() as camera:
         init_folder(screen, background, IMAGE_FOLDER)
         while True:
             show_image(screen, background, 'images/start_camera.jpg')
