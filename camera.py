@@ -83,31 +83,26 @@ def set_demensions(img_w, img_h):
     # When running in terminal, the size is not correct (it displays small). Why?
 
     # connect to global vars
-    global screen_height, screen_width, offset_y, offset_x
+    global screen_height, screen_width
 
     # based on output screen resolution, calculate how to display
     ratio_h = (screen_info.current_w * img_h) / img_w
 
-    if (ratio_h < screen_info.current_h):
+    if ratio_h < screen_info.current_h:
         # Use horizontal black bars
         # print "horizontal black bars"
         screen_height = ratio_h
         screen_width = screen_info.current_w
-        offset_y = (screen_info.current_h - ratio_h) / 2
-        offset_x = 0
-    elif (ratio_h > screen_info.current_h):
+    elif ratio_h > screen_info.current_h:
         # Use vertical black bars
         # print "vertical black bars"
         screen_width = (screen_info.current_h * img_w) / img_h
         screen_height = screen_info.current_h
-        offset_x = (screen_info.current_w - screen_width) / 2
-        offset_y = 0
     else:
         # No need for black bars as photo ratio equals screen ratio
         # print "no black bars"
         screen_width = screen_info.current_w
         screen_height = screen_info.current_h
-        offset_y = offset_x = 0
 
 
 def InitFolder(imagefolder):
@@ -169,7 +164,7 @@ def show_image(image_path):
     screen.fill(pygame.Color("white"))  # clear the screen	
     img = pygame.image.load(image_path)  # load the image
     img = img.convert()
-    set_demensions(img.get_width(), img.get_height())  # set pixel dimensions based on image	
+    #set_demensions(img.get_width(), img.get_height())  # set pixel dimensions based on image	
     x = (screen_info.current_w / 2) - (img.get_width() / 2)
     y = (screen_info.current_h / 2) - (img.get_height() / 2)
     screen.blit(img, (x, y))
