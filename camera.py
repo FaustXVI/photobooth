@@ -48,7 +48,7 @@ camera.vflip = False
 camera.brightness = 50
 camera.preview_alpha = 120
 camera.preview_fullscreen = True
-camera.resolution = screen_dimensions
+camera.resolution = (1920,1080)
 
 
 # camera.framerate             = 24
