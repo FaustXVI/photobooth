@@ -43,10 +43,6 @@ screen_dimensions = (screen_width,screen_height)
 screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN) 
 background = pygame.Surface(screen.get_size()).convert()
 
-screenPicture = screen
-backgroundPicture = background
-
-
 camera = picamera.PiCamera()
 # Initialise the camera object
 camera.resolution = (screen_info.current_w, screen_info.current_h)
@@ -123,7 +119,6 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
     global screen
     global background
     global pygame
-    global screenPicture
     global backgroundPicture
 
     background.fill(pygame.Color(BackgroundColor))
@@ -159,14 +154,12 @@ def UpdateDisplay(Message = "", Numeral = "", CountDownPhoto="",BackgroundColor 
 
 def ShowPicture(file, delay):
     global pygame
-    global screenPicture
-    global backgroundPicture
-    backgroundPicture.fill((0, 0, 0))
+    background.fill((0, 0, 0))
     img = pygame.image.load(file)
-    img = pygame.transform.scale(img, screenPicture.get_size())  # Make the image full screen
+    img = pygame.transform.scale(img, screen.get_size())  # Make the image full screen
     # backgroundPicture.set_alpha(200)
-    backgroundPicture.blit(img, (0, 0))
-    screen.blit(backgroundPicture, (0, 0))
+    background.blit(img, (0, 0))
+    screen.blit(background, (0, 0))
     pygame.display.flip()  # update the display
     time.sleep(delay)
 
@@ -187,8 +180,6 @@ def CapturePicture(CountDownPhoto):
     global imagecounter
     global screen
     global background
-    global screenPicture
-    global backgroundPicture
     global pygame
     UpdateDisplay(CountDownPhoto= CountDownPhoto)
     time.sleep(1)
