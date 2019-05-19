@@ -114,8 +114,10 @@ def capture_picture(screen, background, camera, count_down_photo, image_number):
 
 
 def take_pictures(screen, background, camera):
-    for i in range(1, 3):
-        capture_picture(screen=screen, background=background, camera=camera, count_down_photo=str(i) + '/3',
+    number_of_pictures = 3
+    for i in range(1, 1 + number_of_pictures):
+        capture_picture(screen=screen, background=background, camera=camera,
+                        count_down_photo=str(i) + '/' + str(number_of_pictures),
                         image_number=i)
 
 
