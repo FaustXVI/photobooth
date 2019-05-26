@@ -30,10 +30,12 @@ class Photobooth:
         return self.camera.take_picture(image_number)
 
     def run_shoot_scenario(self, image_number: int):
-        return self.camera.with_preview(image_number, self.random.choice([
-            self.normal,
-            self.speed,
-        ]))
+        if self.random.is_normal():
+            return self.camera.with_preview(image_number, self.normal)
+        else:
+            return self.camera.with_preview(image_number, self.random.choice([
+                self.speed,
+            ]))
 
     def take_picture(self, image_number: int, number_of_pictures: int):
         self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)
