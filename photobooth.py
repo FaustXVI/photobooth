@@ -16,9 +16,9 @@ class Photobooth:
     def normal(self, image_number):
         for x in range(3, -1, -1):
             if x == 0:
-                self.screen.update_display(message="PRENEZ LA POSE", background_color="black")
+                self.screen.update_display(message="PRENEZ LA POSE")
             else:
-                self.screen.update_display(message=str(x), background_color="black", size=800)
+                self.screen.update_display(message=str(x), size=800)
             self.sleep(1)
         return self.camera.take_picture(image_number)
 

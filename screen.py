@@ -17,7 +17,7 @@ class Screen:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pygame.quit()
 
-    def update_display(self, message: str, background_color: str = "white", size: int = 100):
+    def update_display(self, message: str, background_color: str = "black", size: int = 100):
         self.background.fill(pygame.Color(background_color))
         font = pygame.font.Font(None, size)
         text = font.render(message, 1, (227, 157, 200))
