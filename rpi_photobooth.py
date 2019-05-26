@@ -8,7 +8,7 @@ from camera import Camera
 from photobooth import Photobooth
 from screen import Screen
 
-IMAGE_FOLDER = os.path.join('Photos', 'images')
+IMAGE_FOLDER = 'Photos'
 
 
 def main():

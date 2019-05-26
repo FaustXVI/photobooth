@@ -1,5 +1,5 @@
+import datetime
 import picamera
-import time
 import os
 
 HD_RESOLUTION = (1920, 1080)
@@ -29,8 +29,8 @@ class Camera:
         self.camera.__exit__(exc_type, exc_val, exc_tb)
 
     def take_picture(self, image_number: int):
-        ts = time.time()
-        filename = os.path.join(self.pictures_folder, str(image_number) + "_" + str(ts) + '.jpg')
+        time = datetime.now().strftime("%H_%M_%S")
+        filename = os.path.join(self.pictures_folder, time + "_" + str(image_number) + '.jpg')
         self.camera.capture(filename)
         return filename
 
