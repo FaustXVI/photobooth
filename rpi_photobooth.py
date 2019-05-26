@@ -1,26 +1,14 @@
 import time
 
 import os
-import random
 
 from button import Button
 from camera import Camera
+from my_random import MyRandom
 from photobooth import Photobooth
 from screen import Screen
 
 IMAGE_FOLDER = 'Photos'
-
-
-class MyRandom:
-    def __init__(self):
-        self.random = random
-
-    def choice(self, array):
-        return self.choice(array)
-
-    def is_normal(self):
-        return self.random.randint(1, 10) != 1
-
 
 def main():
     with Screen() as screen:
