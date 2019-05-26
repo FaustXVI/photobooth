@@ -27,6 +27,13 @@ class Camera:
         self.camera.brightness = 50
         self.camera.preview_alpha = 120
         self.camera.preview_fullscreen = True
+        
+    def __enter__(self):
+        self.camera.__enter__()
+        return self
+    
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.camera.__exit__(exc_type, exc_val, exc_tb)
 
     def capture_picture(self, count_down_photo: str, image_number: int):
         self.screen.update_display(message=count_down_photo, size=500)
