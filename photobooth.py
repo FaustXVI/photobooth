@@ -16,12 +16,12 @@ HD_RESOLUTION = (1920, 1080)
 
 PHOTO_FOLDER = 'Photos'
 IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
-BUTTON_PIN = 25
+BUTTON_PIN = 22
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
 
-GPIO.setmode(GPIO.BCM)
-GPIO.setup(BUTTON_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
+GPIO.setmode(GPIO.BOARD)
+GPIO.setup(BUTTON_PIN, GPIO.IN)
 
 
 def create_camera():
@@ -73,7 +73,7 @@ def wait_for_event():
     no_event = True
     while no_event:
         input_state = GPIO.input(BUTTON_PIN)
-        if not input_state:
+        if input_state:
             no_event = False
             return
         for event in pygame.event.get():
