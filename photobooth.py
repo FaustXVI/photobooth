@@ -42,7 +42,7 @@ def main(threadName, *args):
         while True:
             screen.show_image('images/start_camera.jpg')
             wait_for_event()
-            camera.take_pictures(screen, camera)
+            camera.take_pictures()
         GPIO.cleanup()
 
 
