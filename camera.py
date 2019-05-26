@@ -55,10 +55,4 @@ class Camera:
         filename = os.path.join(IMAGE_FOLDER, str(image_number) + "_" + str(ts) + '.jpg')
         self.camera.capture(filename)
         self.camera.stop_preview()
-        self.screen.show_picture(filename, 2)
         return filename
-
-    def take_pictures(self):
-        number_of_pictures = 3
-        for i in range(1, 1 + number_of_pictures):
-            self.capture_picture(count_down_photo=str(i) + '/' + str(number_of_pictures), image_number=i)
