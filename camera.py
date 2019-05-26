@@ -1,5 +1,4 @@
 import picamera
-import pygame
 import time
 import os
 
@@ -7,16 +6,13 @@ from screen import Screen
 
 HD_RESOLUTION = (1920, 1080)
 
-PHOTO_FOLDER = 'Photos'
-IMAGE_FOLDER = os.path.join(PHOTO_FOLDER, 'images')
 IMAGE_WIDTH = 550
 IMAGE_HEIGHT = 360
 
 
 class Camera:
-    def __init__(self, screen: Screen):
-        screen.update_display(message='Folder Check...')
-        os.makedirs(IMAGE_FOLDER, exist_ok=True)
+    def __init__(self, screen: Screen, pictures_folder):
+        self.pictures_folder = pictures_folder
         self.screen = screen
         self.camera = picamera.PiCamera(resolution=HD_RESOLUTION,
                                         framerate=30,
@@ -27,20 +23,16 @@ class Camera:
         self.camera.brightness = 50
         self.camera.preview_alpha = 120
         self.camera.preview_fullscreen = True
-        
+
     def __enter__(self):
         self.camera.__enter__()
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.camera.__exit__(exc_type, exc_val, exc_tb)
 
-    def capture_picture(self, count_down_photo: str, image_number: int):
-        self.screen.update_display(message=count_down_photo, size=500)
-        time.sleep(1)
-        self.screen.update_display()
+    def capture_picture(self, image_number: int):
         self.screen.reset()
-        pygame.display.flip()
         self.camera.start_preview()
 
         for x in range(3, -1, -1):
@@ -50,9 +42,9 @@ class Camera:
                 self.screen.update_display(message=str(x), background_color="black", size=800)
             time.sleep(1)
 
-        self.screen.update_display()
+        self.screen.reset()
         ts = time.time()
-        filename = os.path.join(IMAGE_FOLDER, str(image_number) + "_" + str(ts) + '.jpg')
+        filename = os.path.join(self.pictures_folder, str(image_number) + "_" + str(ts) + '.jpg')
         self.camera.capture(filename)
         self.camera.stop_preview()
         return filename

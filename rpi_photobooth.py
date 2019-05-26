@@ -1,16 +1,22 @@
-import pygame
+import time
+
+import os
 
 from button import Button
 from camera import Camera
 from photobooth import Photobooth
 from screen import Screen
 
+IMAGE_FOLDER = os.path.join('Photos', 'images')
+
 
 def main():
     with Screen() as screen:
         with Button(22) as button:
-            with Camera(screen) as camera:
-                Photobooth(screen, camera, button).start()
+            screen.update_display(message='Folder Check...')
+            os.makedirs(IMAGE_FOLDER, exist_ok=True)
+            with Camera(screen, IMAGE_FOLDER) as camera:
+                Photobooth(screen, camera, button, time.sleep).start()
 
 
 if __name__ == '__main__':

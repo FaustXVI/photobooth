@@ -7,15 +7,17 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, camera, button):
+    def __init__(self, screen, camera, button,sleep):
+        self.sleep = sleep
         self.screen = screen
         self.camera = camera
         self.button = button
 
     def take_pictures(self, number_of_pictures):
         for i in range(1, 1 + number_of_pictures):
-            picture = self.camera.capture_picture(count_down_photo=str(i) + '/' + str(number_of_pictures),
-                                                  image_number=i)
+            self.screen.update_display(message=str(i) + '/' + str(number_of_pictures), size=500)
+            self.sleep(1)
+            picture = self.camera.capture_picture(i)
             self.screen.show_picture(picture, 2)
 
     def start(self):
