@@ -1,8 +1,14 @@
-from threading import Thread
+from enum import Enum
+import pygame
 
 from button import Button
 from camera import Camera
 from screen import Screen
+
+
+class Actions(Enum):
+    TAKE_PICTURES = 1
+    QUIT = 2
 
 
 class Photobooth:
@@ -12,10 +18,12 @@ class Photobooth:
         self.button = button
 
     def start(self):
-        while True:
+        action = Actions.TAKE_PICTURES
+        while action != Actions.QUIT:
             self.screen.show_image('images/start_camera.jpg')
-            self.button.wait_for_event()
-            self.camera.take_pictures()
+            action = self.button.wait_for_event()
+            if action == Actions.TAKE_PICTURES:
+                self.camera.take_pictures()
 
 
 def main():
@@ -23,6 +31,7 @@ def main():
     with Button(22) as button:
         with Camera(screen) as camera:
             Photobooth(screen, camera, button).start()
+            pygame.quit()
 
 
 if __name__ == '__main__':

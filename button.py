@@ -2,6 +2,9 @@ import RPi.GPIO as GPIO
 import time
 import pygame
 
+from photobooth import Actions
+
+
 class Button:
     def __init__(self, pin_number: int):
         self.pin_number = pin_number
@@ -15,17 +18,14 @@ class Button:
         GPIO.cleanup()
 
     def wait_for_event(self):
-        no_event = True
-        while no_event:
+        while True:
             input_state = GPIO.input(self.pin_number)
             if input_state:
-                no_event = False
-                return
+                return Actions.TAKE_PICTURES
             for event in pygame.event.get():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_ESCAPE:
-                        pygame.quit()
+                        return Actions.QUIT
                     if event.key == pygame.K_DOWN:
-                        no_event = False
-                        return
+                        return Actions.TAKE_PICTURES
             time.sleep(0.2)
