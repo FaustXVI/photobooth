@@ -41,15 +41,18 @@ def test_photobooth_take_pictures():
     mock.assert_has_calls([call.screen.update_display(message='1/3', size=500),
                            call.sleep(1),
                            call.camera.with_preview(1, photobooth.normal),
-                           call.screen.show_picture("photo1", 2),
+                           call.screen.show_picture("photo1"),
+                           call.sleep(3),
                            call.screen.update_display(message='2/3', size=500),
                            call.sleep(1),
                            call.camera.with_preview(2, photobooth.normal),
-                           call.screen.show_picture("photo2", 2),
+                           call.screen.show_picture("photo2"),
+                           call.sleep(3),
                            call.screen.update_display(message='3/3', size=500),
                            call.sleep(1),
                            call.camera.with_preview(3, photobooth.normal),
-                           call.screen.show_picture("photo3", 2)])
+                           call.screen.show_picture("photo3"),
+                           call.sleep(3),])
 
 
 def test_photobooth_random_senario_normal():

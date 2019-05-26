@@ -39,7 +39,8 @@ class Photobooth:
         self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)
         self.sleep(1)
         picture = self.run_shoot_scenario(image_number)
-        self.screen.show_picture(picture, 2)
+        self.screen.show_picture(picture)
+        self.sleep(3)
         return picture
 
     def take_pictures(self, number_of_pictures: int):

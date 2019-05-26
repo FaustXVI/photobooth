@@ -38,11 +38,10 @@ class Screen:
         self.screen.blit(img, (x, y))
         pygame.display.flip()
 
-    def show_picture(self, file, delay: int):
+    def show_picture(self, file):
         self.background.fill((0, 0, 0))
         img = pygame.image.load(file)
         img = pygame.transform.scale(img, self.screen.get_size())  # Make the image full screen
         self.background.blit(img, (0, 0))
         self.screen.blit(self.background, (0, 0))
-        pygame.display.flip()  # update the display
-        time.sleep(delay)
+        pygame.display.flip()
