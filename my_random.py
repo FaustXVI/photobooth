@@ -6,7 +6,7 @@ class MyRandom:
         self.random = random
 
     def choice(self, array):
-        return self.choice(array)
+        return self.random.choice(array)
 
     def is_normal(self):
         return self.random.randint(1, 10) != 1
