@@ -39,3 +39,26 @@ def test_photobooth_take_pictures():
                            call.sleep(1),
                            call.camera.with_preview(3, photobooth.normal),
                            call.screen.show_picture("photo3", 2)])
+
+
+def test_photobooth_normal():
+    mock = Mock()
+    mock.camera = Mock()
+    mock.screen = Mock()
+    mock.sleep = Mock()
+    button = Mock()
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep)
+    mock.camera.take_picture.side_effect = ["photo1"]
+    result = photobooth.normal(1)
+    mock.assert_has_calls([
+        call.screen.update_display(message="3", background_color="black", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="2", background_color="black", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="1", background_color="black", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="PRENEZ LA POSE", background_color="black"),
+        call.sleep(1),
+        call.camera.take_picture(1)
+    ])
+    assert result == "photo1"

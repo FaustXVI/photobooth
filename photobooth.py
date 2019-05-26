@@ -19,7 +19,7 @@ class Photobooth:
                 self.screen.update_display(message="PRENEZ LA POSE", background_color="black")
             else:
                 self.screen.update_display(message=str(x), background_color="black", size=800)
-        self.sleep(1)
+            self.sleep(1)
         return self.camera.take_picture(image_number)
 
     def capture_picture(self, image_number: int):

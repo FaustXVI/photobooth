@@ -17,17 +17,16 @@ class Screen:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pygame.quit()
 
-    def update_display(self, message: str = "", background_color: str = "white", size: int = 100):
+    def update_display(self, message: str, background_color: str = "white", size: int = 100):
         self.background.fill(pygame.Color(background_color))
-        if message != "":
-            font = pygame.font.Font(None, size)
-            text = font.render(message, 1, (227, 157, 200))
-            textpos = text.get_rect()
-            textpos.centerx = self.background.get_rect().centerx
-            textpos.centery = self.background.get_rect().centery
-            self.background.blit(text, textpos)
-            self.screen.blit(self.background, (0, 0))
-            pygame.display.flip()
+        font = pygame.font.Font(None, size)
+        text = font.render(message, 1, (227, 157, 200))
+        textpos = text.get_rect()
+        textpos.centerx = self.background.get_rect().centerx
+        textpos.centery = self.background.get_rect().centery
+        self.background.blit(text, textpos)
+        self.screen.blit(self.background, (0, 0))
+        pygame.display.flip()
 
     def show_image(self, image_path):
         self.screen.fill(pygame.Color("white"))  # clear the screen	
@@ -47,7 +46,3 @@ class Screen:
         self.screen.blit(self.background, (0, 0))
         pygame.display.flip()  # update the display
         time.sleep(delay)
-
-    def reset(self):
-        self.background.fill(pygame.Color("black"))
-        self.screen.blit(self.background, (0, 0))
