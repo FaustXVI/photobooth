@@ -5,15 +5,25 @@ from camera import Camera
 from screen import Screen
 
 
-def main(threadName, *args):
+class Photobooth:
+    def __init__(self, screen: Screen, camera: Camera, button: Button):
+        self.screen = screen
+        self.camera = camera
+        self.button = button
+
+    def start(self):
+        while True:
+            self.screen.show_image('images/start_camera.jpg')
+            self.button.wait_for_event()
+            self.camera.take_pictures()
+
+
+def main():
     screen = Screen()
     with Button(22) as button:
         with Camera(screen) as camera:
-            while True:
-                screen.show_image('images/start_camera.jpg')
-                button.wait_for_event()
-                camera.take_pictures()
+            Photobooth(screen, camera, button).start()
 
 
-# launch the main thread
-Thread(target=main, args=('Main', 1)).start()
+if __name__ == '__main__':
+    main()

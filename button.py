@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import time
-
+import pygame
 
 class Button:
     def __init__(self, pin_number: int):
@@ -15,7 +15,6 @@ class Button:
         GPIO.cleanup()
 
     def wait_for_event(self):
-        global pygame
         no_event = True
         while no_event:
             input_state = GPIO.input(self.pin_number)
