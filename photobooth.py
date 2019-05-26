@@ -7,7 +7,8 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, camera, button, sleep):
+    def __init__(self, screen, camera, button, sleep, random):
+        self.random = random
         self.sleep = sleep
         self.screen = screen
         self.camera = camera
@@ -22,8 +23,17 @@ class Photobooth:
             self.sleep(1)
         return self.camera.take_picture(image_number)
 
+    def speed(self, image_number):
+        for x in range(3, 1, -1):
+            self.screen.update_display(message=str(x), size=800)
+            self.sleep(1)
+        return self.camera.take_picture(image_number)
+
     def run_shoot_scenario(self, image_number: int):
-        return self.camera.with_preview(image_number, self.normal)
+        return self.camera.with_preview(image_number, self.random.choice([
+            self.normal,
+            self.speed,
+        ]))
 
     def take_picture(self, image_number: int, number_of_pictures: int):
         self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)

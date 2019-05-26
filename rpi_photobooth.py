@@ -1,6 +1,7 @@
 import time
 
 import os
+import random
 
 from button import Button
 from camera import Camera
@@ -16,7 +17,7 @@ def main():
             screen.update_display(message='Folder Check...')
             os.makedirs(IMAGE_FOLDER, exist_ok=True)
             with Camera(IMAGE_FOLDER) as camera:
-                Photobooth(screen, camera, button, time.sleep).start()
+                Photobooth(screen, camera, button, time.sleep, random).start()
 
 
 if __name__ == '__main__':
