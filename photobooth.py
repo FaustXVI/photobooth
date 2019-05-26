@@ -22,15 +22,18 @@ class Photobooth:
             self.sleep(1)
         return self.camera.take_picture(image_number)
 
-    def capture_picture(self, image_number: int):
+    def run_shoot_scenario(self, image_number: int):
         return self.camera.with_preview(image_number, self.normal)
 
-    def take_pictures(self, number_of_pictures):
-        for i in range(1, 1 + number_of_pictures):
-            self.screen.update_display(message=str(i) + '/' + str(number_of_pictures), size=500)
-            self.sleep(1)
-            picture = self.capture_picture(i)
-            self.screen.show_picture(picture, 2)
+    def take_picture(self, image_number: int, number_of_pictures: int):
+        self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)
+        self.sleep(1)
+        picture = self.run_shoot_scenario(image_number)
+        self.screen.show_picture(picture, 2)
+        return picture
+
+    def take_pictures(self, number_of_pictures: int):
+        return [self.take_picture(i, number_of_pictures) for i in range(1, 1 + number_of_pictures)]
 
     def start(self):
         action = Actions.TAKE_PICTURES
