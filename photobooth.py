@@ -36,7 +36,7 @@ def create_camera():
     c.preview_fullscreen = True
     return c
 
-def capture_picture(screen, camera, count_down_photo, image_number):
+def capture_picture(screen: Screen, camera, count_down_photo, image_number):
     screen.update_display(message=count_down_photo, size=500)
     time.sleep(1)
     screen.update_display()
@@ -56,11 +56,11 @@ def capture_picture(screen, camera, count_down_photo, image_number):
     filename = os.path.join(IMAGE_FOLDER, str(image_number) + "_" + str(ts) + '.jpg')
     camera.capture(filename)
     camera.stop_preview()
-    screen.show_picture(screen, filename, 2)
+    screen.show_picture(filename, 2)
     return filename
 
 
-def take_pictures(screen, camera):
+def take_pictures(screen: Screen, camera):
     number_of_pictures = 3
     for i in range(1, 1 + number_of_pictures):
         capture_picture(screen=screen, camera=camera,
@@ -92,7 +92,7 @@ def main(threadName, *args):
         screen.update_display(message='Folder Check...')
         os.makedirs(IMAGE_FOLDER, exist_ok=True)
         while True:
-            screen.show_image(screen, 'images/start_camera.jpg')
+            screen.show_image('images/start_camera.jpg')
             wait_for_event()
             take_pictures(screen, camera)
         GPIO.cleanup()
