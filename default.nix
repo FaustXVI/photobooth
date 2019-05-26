@@ -5,7 +5,7 @@ let
     pip
     pillow
     pytest
-    # other python packages you want
+    mock
   ];
   python-with-my-packages = python3.withPackages my-python-packages;
 in
