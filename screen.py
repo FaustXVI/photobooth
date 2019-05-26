@@ -1,6 +1,7 @@
 import pygame
 import time
 
+
 class Screen:
     def __init__(self):
         pygame.init()
@@ -10,7 +11,7 @@ class Screen:
         self.screen = pygame.display.set_mode(screen_dimensions, pygame.FULLSCREEN)
         self.background = pygame.Surface(self.screen.get_size()).convert()
 
-    def update_display(self, message="", background_color="white", size=100):
+    def update_display(self, message: str = "", background_color: str = "white", size: int = 100):
         self.background.fill(pygame.Color(background_color))
         if message != "":
             font = pygame.font.Font(None, size)
@@ -32,7 +33,7 @@ class Screen:
         self.screen.blit(img, (x, y))
         pygame.display.flip()
 
-    def show_picture(self, file, delay):
+    def show_picture(self, file, delay:int):
         self.background.fill((0, 0, 0))
         img = pygame.image.load(file)
         img = pygame.transform.scale(img, self.screen.get_size())  # Make the image full screen
