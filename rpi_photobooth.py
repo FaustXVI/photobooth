@@ -15,7 +15,7 @@ def main():
         with Button(22) as button:
             screen.update_display(message='Folder Check...')
             os.makedirs(IMAGE_FOLDER, exist_ok=True)
-            with Camera(screen, IMAGE_FOLDER) as camera:
+            with Camera(IMAGE_FOLDER) as camera:
                 Photobooth(screen, camera, button, time.sleep).start()
 
 
