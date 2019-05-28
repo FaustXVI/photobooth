@@ -16,22 +16,21 @@ class Photobooth:
         self.camera = camera
         self.button = button
 
-    def normal(self, image_number):
-        for x in range(3, 0, -1):
-            self.screen.update_display(message=str(x), size=800)
+    def count_down(self, range):
+        for x in range:
+            self.screen.update_display(message="{:n}".format(x))
             self.sleep(1)
+
+    def normal(self, image_number):
+        self.count_down(range(3, 0, -1))
         return self.camera.take_picture(image_number)
 
     def fast(self, image_number):
-        for x in range(3, 1, -1):
-            self.screen.update_display(message=str(x), size=800)
-            self.sleep(1)
+        self.count_down(range(3, 1, -1))
         return self.camera.take_picture(image_number)
 
     def slow(self, image_number):
-        for x in [3, 2, 1.5, 1, 0.5, 0.25, 0.1, 0.01]:
-            self.screen.update_display(message="{:n}".format(x), size=800)
-            self.sleep(1)
+        self.count_down([3, 2, 1.5, 1, 0.5, 0.25, 0.1, 0.01])
         return self.camera.take_picture(image_number)
 
     def run_shoot_scenario(self, image_number: int):

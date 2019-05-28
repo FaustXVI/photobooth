@@ -13,7 +13,7 @@ IMAGE_FOLDER = 'Photos'
 def main():
     with Screen() as screen:
         with Button(22) as button:
-            screen.update_display(message='Folder Check...')
+            screen.update_display(message='Folder Check...', size=100)
             os.makedirs(IMAGE_FOLDER, exist_ok=True)
             with Camera(IMAGE_FOLDER) as camera:
                 Photobooth(screen, camera, button, time.sleep, MyRandom()).start()

@@ -88,11 +88,11 @@ def test_photobooth_normal():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.normal(1)
     mock.assert_has_calls([
-        call.screen.update_display(message="3", size=800),
+        call.screen.update_display(message="3"),
         call.sleep(1),
-        call.screen.update_display(message="2", size=800),
+        call.screen.update_display(message="2"),
         call.sleep(1),
-        call.screen.update_display(message="1", size=800),
+        call.screen.update_display(message="1"),
         call.sleep(1),
         call.camera.take_picture(1)
     ])
@@ -108,9 +108,9 @@ def test_photobooth_speed():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.fast(1)
     mock.assert_has_calls([
-        call.screen.update_display(message="3", size=800),
+        call.screen.update_display(message="3"),
         call.sleep(1),
-        call.screen.update_display(message="2", size=800),
+        call.screen.update_display(message="2"),
         call.sleep(1),
         call.camera.take_picture(1)
     ])
@@ -126,21 +126,21 @@ def test_photobooth_slow():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.slow(1)
     mock.assert_has_calls([
-        call.screen.update_display(message="3", size=800),
+        call.screen.update_display(message="3"),
         call.sleep(1),
-        call.screen.update_display(message="2", size=800),
+        call.screen.update_display(message="2"),
         call.sleep(1),
-        call.screen.update_display(message="1,5", size=800),
+        call.screen.update_display(message="1,5"),
         call.sleep(1),
-        call.screen.update_display(message="1", size=800),
+        call.screen.update_display(message="1"),
         call.sleep(1),
-        call.screen.update_display(message="0,5", size=800),
+        call.screen.update_display(message="0,5"),
         call.sleep(1),
-        call.screen.update_display(message="0,25", size=800),
+        call.screen.update_display(message="0,25"),
         call.sleep(1),
-        call.screen.update_display(message="0,1", size=800),
+        call.screen.update_display(message="0,1"),
         call.sleep(1),
-        call.screen.update_display(message="0,01", size=800),
+        call.screen.update_display(message="0,01"),
         call.sleep(1),
         call.camera.take_picture(1)
     ])
