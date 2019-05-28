@@ -18,7 +18,7 @@ class Photobooth:
 
     def count_down(self, range):
         for x in range:
-            self.screen.update_display(message="{:n}".format(x))
+            self.screen.update_display("{:n}".format(x))
             self.sleep(1)
 
     def normal(self, image_number):
