@@ -1,6 +1,8 @@
-from unittest.mock import Mock, call
+from unittest.mock import Mock, call, ANY
 
 from photobooth import Photobooth, Actions
+
+NUMBER_OF_TRAPS = 2
 
 
 class FakeRandom:
@@ -52,7 +54,7 @@ def test_photobooth_take_pictures():
                            call.sleep(3),
                            call.screen.update_display(message='2/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(2, photobooth.speed),
+                           call.camera.with_preview(2, photobooth.fast),
                            call.screen.show_picture("photo2"),
                            call.sleep(3),
                            call.screen.update_display(message='3/3', size=500),
@@ -64,16 +66,17 @@ def test_photobooth_take_pictures():
 
 def test_photobooth_random_senario_normal():
     camera = Mock()
-    photobooth = Photobooth(Mock(), camera, Mock(), Mock(), FakeRandom([True], [1]))
+    photobooth = Photobooth(Mock(), camera, Mock(), Mock(), FakeRandom([True], []))
     photobooth.run_shoot_scenario(1)
     camera.assert_has_calls([call.with_preview(1, photobooth.normal)])
 
 
-def test_photobooth_random_senario_speed():
-    camera = Mock()
-    photobooth = Photobooth(Mock(), camera, Mock(), Mock(), FakeRandom([False], [0]))
-    photobooth.run_shoot_scenario(1)
-    camera.assert_has_calls([call.with_preview(1, photobooth.speed)])
+def test_photobooth_random_senario_fast():
+    for i in range(0, NUMBER_OF_TRAPS):
+        camera = Mock()
+        photobooth = Photobooth(Mock(), camera, Mock(), Mock(), FakeRandom([False], [i]))
+        photobooth.run_shoot_scenario(1)
+        camera.assert_has_calls([call.with_preview(1, ANY)])
 
 
 def test_photobooth_normal():
@@ -105,11 +108,41 @@ def test_photobooth_speed():
     mock.sleep = Mock()
     photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock())
     mock.camera.take_picture.side_effect = ["photo1"]
-    result = photobooth.speed(1)
+    result = photobooth.fast(1)
     mock.assert_has_calls([
         call.screen.update_display(message="3", size=800),
         call.sleep(1),
         call.screen.update_display(message="2", size=800),
+        call.sleep(1),
+        call.camera.take_picture(1)
+    ])
+    assert result == "photo1"
+
+
+def test_photobooth_slow():
+    mock = Mock()
+    mock.camera = Mock()
+    mock.screen = Mock()
+    mock.sleep = Mock()
+    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock())
+    mock.camera.take_picture.side_effect = ["photo1"]
+    result = photobooth.slow(1)
+    mock.assert_has_calls([
+        call.screen.update_display(message="3", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="2", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="1,5", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="1", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="0,5", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="0,25", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="0,1", size=800),
+        call.sleep(1),
+        call.screen.update_display(message="0,01", size=800),
         call.sleep(1),
         call.camera.take_picture(1)
     ])

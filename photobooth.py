@@ -1,3 +1,4 @@
+import locale
 from enum import Enum
 
 
@@ -8,6 +9,7 @@ class Actions(Enum):
 
 class Photobooth:
     def __init__(self, screen, camera, button, sleep, random):
+        locale.setlocale(locale.LC_ALL, "fr_FR")
         self.random = random
         self.sleep = sleep
         self.screen = screen
@@ -23,9 +25,15 @@ class Photobooth:
             self.sleep(1)
         return self.camera.take_picture(image_number)
 
-    def speed(self, image_number):
+    def fast(self, image_number):
         for x in range(3, 1, -1):
             self.screen.update_display(message=str(x), size=800)
+            self.sleep(1)
+        return self.camera.take_picture(image_number)
+
+    def slow(self, image_number):
+        for x in [3, 2, 1.5, 1, 0.5, 0.25, 0.1, 0.01]:
+            self.screen.update_display(message="{:n}".format(x), size=800)
             self.sleep(1)
         return self.camera.take_picture(image_number)
 
@@ -34,7 +42,8 @@ class Photobooth:
             return self.camera.with_preview(image_number, self.normal)
         else:
             return self.camera.with_preview(image_number, self.random.choice([
-                self.speed,
+                self.fast,
+                self.slow,
             ]))
 
     def take_picture(self, image_number: int, number_of_pictures: int):
