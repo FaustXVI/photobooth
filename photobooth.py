@@ -9,7 +9,7 @@ class Actions(Enum):
 
 class Photobooth:
     def __init__(self, screen, camera, button, sleep, random):
-        locale.setlocale(locale.LC_ALL, "fr_FR")
+        locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
         self.sleep = sleep
         self.screen = screen
