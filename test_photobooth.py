@@ -81,12 +81,31 @@ def test_photobooth_self_destruct():
     photobooth.start()
     mock.screen.show_image.assert_called()
     mock.assert_has_calls([call.speakers.play_sound('sound/self-destruct.ogg'),
-                           call.sleep(4),
-                           call.screen.update_display("3"),
+                           call.screen.update_display(message='WARNING', background_color='red', size=500),
+                           call.sleep(2),
+                           call.screen.update_display(message='self-destruction', background_color='red', size=400),
+                           call.sleep(3),
+                           call.screen.update_display(message="10", background_color='red'),
                            call.sleep(1),
-                           call.screen.update_display("2"),
+                           call.screen.update_display(message="9", background_color='red'),
                            call.sleep(1),
-                           call.screen.update_display("1"),
+                           call.screen.update_display(message="8", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="7", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="6", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="5", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="4", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="3", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="2", background_color='red'),
+                           call.sleep(1),
+                           call.screen.update_display(message="1", background_color='red'),
+                           call.sleep(1),
+                           call.screen.show_picture("images/bsod.png"),
                            call.sleep(1),
                            call.camera.take_picture(1),
                            call.screen.show_picture("photo1"),
@@ -117,11 +136,11 @@ def test_photobooth_normal():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.normal(1)
     mock.assert_has_calls([
-        call.screen.update_display("3"),
+        call.screen.update_display(message="3", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("2"),
+        call.screen.update_display(message="2", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("1"),
+        call.screen.update_display(message="1", background_color="black"),
         call.sleep(1),
         call.camera.take_picture(1)
     ])
@@ -137,9 +156,9 @@ def test_photobooth_speed():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.fast(1)
     mock.assert_has_calls([
-        call.screen.update_display("3"),
+        call.screen.update_display(message="3", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("2"),
+        call.screen.update_display(message="2", background_color="black"),
         call.sleep(1),
         call.camera.take_picture(1)
     ])
@@ -155,21 +174,21 @@ def test_photobooth_slow():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.slow(1)
     mock.assert_has_calls([
-        call.screen.update_display("3"),
+        call.screen.update_display(message="3", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("2"),
+        call.screen.update_display(message="2", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("1,5"),
+        call.screen.update_display(message="1,5", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("1"),
+        call.screen.update_display(message="1", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("0,5"),
+        call.screen.update_display(message="0,5", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("0,25"),
+        call.screen.update_display(message="0,25", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("0,1"),
+        call.screen.update_display(message="0,1", background_color="black"),
         call.sleep(1),
-        call.screen.update_display("0,01"),
+        call.screen.update_display(message="0,01", background_color="black"),
         call.sleep(1),
         call.camera.take_picture(1)
     ])

@@ -18,9 +18,9 @@ class Photobooth:
         self.actionables = actionables
         self.speakers = speakers
 
-    def count_down(self, range):
+    def count_down(self, range, background_color='black'):
         for x in range:
-            self.screen.update_display("{:n}".format(x))
+            self.screen.update_display(message="{:n}".format(x), background_color=background_color)
             self.sleep(1)
 
     def normal(self, image_number):
@@ -57,8 +57,14 @@ class Photobooth:
 
     def destruct(self):
         self.speakers.play_sound('sound/self-destruct.ogg')
-        self.sleep(4)
-        picture = self.normal(1)
+        self.screen.update_display(message='WARNING', background_color='red', size=500)
+        self.sleep(2)
+        self.screen.update_display(message='self-destruction', background_color='red', size=400)
+        self.sleep(3)
+        self.count_down(range(10, 0, -1), background_color="red")
+        self.screen.show_picture("images/bsod.png")
+        self.sleep(1)
+        picture = self.camera.take_picture(1)
         self.screen.show_picture(picture)
         self.sleep(3)
 
