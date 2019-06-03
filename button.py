@@ -1,10 +1,8 @@
 import RPi.GPIO as GPIO
 
-from photobooth import Actions
-
 
 class Button:
-    def __init__(self, pin_number: int, action=Actions.TAKE_PICTURES):
+    def __init__(self, pin_number: int, action):
         self.pin_number = pin_number
         self.action = action
         GPIO.setmode(GPIO.BOARD)

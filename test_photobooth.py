@@ -28,8 +28,9 @@ def test_photobooth_quit():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
+    mock.speakers = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, FakeRandom([], []))
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers, FakeRandom([], []))
     button.wait_for_event.side_effect = [Actions.QUIT]
     photobooth.start()
     mock.screen.show_image.assert_called()
@@ -41,8 +42,10 @@ def test_photobooth_take_pictures():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
+    mock.speakers = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, FakeRandom([True, False, True], [0]))
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers,
+                            FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.TAKE_PICTURES, Actions.QUIT]
     mock.camera.with_preview.side_effect = ["photo1", "photo2", "photo3"]
     photobooth.start()
@@ -64,9 +67,35 @@ def test_photobooth_take_pictures():
                            call.sleep(3), ])
 
 
+def test_photobooth_self_destruct():
+    mock = Mock()
+    mock.camera = Mock()
+    mock.screen = Mock()
+    mock.sleep = Mock()
+    mock.speakers = Mock()
+    button = Mock()
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers,
+                            FakeRandom([True, False, True], [0]))
+    button.wait_for_event.side_effect = [Actions.SELF_DESTRUCT, Actions.QUIT]
+    mock.camera.take_picture.side_effect = ["photo1"]
+    photobooth.start()
+    mock.screen.show_image.assert_called()
+    mock.assert_has_calls([call.speakers.play_sound('sound/self-destruct.ogg'),
+                           call.sleep(4),
+                           call.screen.update_display("3"),
+                           call.sleep(1),
+                           call.screen.update_display("2"),
+                           call.sleep(1),
+                           call.screen.update_display("1"),
+                           call.sleep(1),
+                           call.camera.take_picture(1),
+                           call.screen.show_picture("photo1"),
+                           call.sleep(3), ])
+
+
 def test_photobooth_random_senario_normal():
     camera = Mock()
-    photobooth = Photobooth(Mock(), camera, Mock(), Mock(), FakeRandom([True], []))
+    photobooth = Photobooth(Mock(), camera, Mock(), Mock(), Mock(), FakeRandom([True], []))
     photobooth.run_shoot_scenario(1)
     camera.assert_has_calls([call.with_preview(1, photobooth.normal)])
 
@@ -74,7 +103,7 @@ def test_photobooth_random_senario_normal():
 def test_photobooth_random_senario_fast():
     for i in range(0, NUMBER_OF_TRAPS):
         camera = Mock()
-        photobooth = Photobooth(Mock(), camera, Mock(), Mock(), FakeRandom([False], [i]))
+        photobooth = Photobooth(Mock(), camera, Mock(), Mock(), Mock(), FakeRandom([False], [i]))
         photobooth.run_shoot_scenario(1)
         camera.assert_has_calls([call.with_preview(1, ANY)])
 
@@ -84,7 +113,7 @@ def test_photobooth_normal():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock())
+    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock())
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.normal(1)
     mock.assert_has_calls([
@@ -104,7 +133,7 @@ def test_photobooth_speed():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock())
+    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock())
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.fast(1)
     mock.assert_has_calls([
@@ -122,7 +151,7 @@ def test_photobooth_slow():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock())
+    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock())
     mock.camera.take_picture.side_effect = ["photo1"]
     result = photobooth.slow(1)
     mock.assert_has_calls([

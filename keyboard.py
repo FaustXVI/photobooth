@@ -12,4 +12,6 @@ class Keyboard:
                     return Actions.QUIT
                 if event.key == pygame.K_DOWN:
                     return Actions.TAKE_PICTURES
+                if event.key == pygame.K_UP:
+                    return Actions.SELF_DESTRUCT
         return None
