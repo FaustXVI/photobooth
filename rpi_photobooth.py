@@ -10,6 +10,7 @@ from screen import Screen
 
 IMAGE_FOLDER = 'Photos'
 
+
 def main():
     with Screen() as screen:
         with Button(22) as button:

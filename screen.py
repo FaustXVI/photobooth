@@ -1,5 +1,4 @@
 import pygame
-import time
 
 
 class Screen:
@@ -29,8 +28,8 @@ class Screen:
         pygame.display.flip()
 
     def show_image(self, image_path):
-        self.screen.fill(pygame.Color("white"))  # clear the screen	
-        img = pygame.image.load(image_path)  # load the image
+        self.screen.fill(pygame.Color("white"))
+        img = pygame.image.load(image_path)
         img = img.convert()
         (screen_width, screen_height) = self.screen.get_size()
         x = (screen_width / 2) - (img.get_width() / 2)
@@ -41,7 +40,7 @@ class Screen:
     def show_picture(self, file):
         self.background.fill((0, 0, 0))
         img = pygame.image.load(file)
-        img = pygame.transform.scale(img, self.screen.get_size())  # Make the image full screen
+        img = pygame.transform.scale(img, self.screen.get_size())
         self.background.blit(img, (0, 0))
         self.screen.blit(self.background, (0, 0))
         pygame.display.flip()
