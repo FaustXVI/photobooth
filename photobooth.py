@@ -8,13 +8,13 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, camera, button, sleep, random):
+    def __init__(self, screen, camera, actionables, sleep, random):
         locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
         self.sleep = sleep
         self.screen = screen
         self.camera = camera
-        self.button = button
+        self.actionables = actionables
 
     def count_down(self, range):
         for x in range:
@@ -57,6 +57,6 @@ class Photobooth:
         action = Actions.TAKE_PICTURES
         while action != Actions.QUIT:
             self.screen.show_image('images/start_camera.jpg')
-            action = self.button.wait_for_event()
+            action = self.actionables.wait_for_event()
             if action == Actions.TAKE_PICTURES:
                 self.take_pictures(3)
