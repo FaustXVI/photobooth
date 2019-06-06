@@ -47,7 +47,7 @@ def test_photobooth_take_pictures():
     photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers,
                             FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.TAKE_PICTURES, Actions.QUIT]
-    mock.camera.with_preview.side_effect = ["photo1", "photo2", "photo3"]
+    mock.camera.with_preview.side_effect = [["photo1"], ["photo2"], ["photo3"]]
     photobooth.start()
     mock.screen.show_image.assert_called()
     mock.assert_has_calls([call.screen.update_display(message='1/3', size=500),
