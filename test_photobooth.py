@@ -2,7 +2,7 @@ from unittest.mock import Mock, call, ANY
 
 from photobooth import Photobooth, Actions
 
-NUMBER_OF_TRAPS = 3
+NUMBER_OF_TRAPS = 4
 
 
 class FakeRandom:
@@ -215,3 +215,25 @@ def test_photobooth_double():
         call.camera.take_picture(1)
     ])
     assert result == ["photo1", "photo2"]
+
+def test_photobooth_horn():
+    mock = Mock()
+    mock.camera = Mock()
+    mock.screen = Mock()
+    mock.sleep = Mock()
+    mock.speakers = Mock()
+    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, mock.speakers, Mock())
+    mock.camera.take_picture.side_effect = ["photo1"]
+    result = photobooth.horn(1)
+    mock.assert_has_calls([
+        call.screen.update_display(message="3", background_color="black"),
+        call.sleep(1),
+        call.screen.update_display(message="2", background_color="black"),
+        call.sleep(1),
+        call.screen.update_display(message="1", background_color="black"),
+        call.sleep(1),
+        call.speakers.play_sound("sound/horn.wav"),
+        call.sleep(1),
+        call.camera.take_picture(1)
+    ])
+    assert result == ["photo1"]

@@ -41,6 +41,12 @@ class Photobooth:
         self.sleep(1)
         second_picture = self.camera.take_picture(image_number)
         return [first_picture, second_picture]
+    
+    def horn(self, image_number):
+        self.count_down(range(3, 0, -1))
+        self.speakers.play_sound("sound/horn.wav")
+        self.sleep(1)
+        return [self.camera.take_picture(image_number)]
 
     def run_shoot_scenario(self, image_number: int):
         if self.random.is_normal():
@@ -50,6 +56,7 @@ class Photobooth:
                 self.fast,
                 self.slow,
                 self.double,
+                self.horn,
             ]))
 
     def take_picture(self, image_number: int, number_of_pictures: int):
