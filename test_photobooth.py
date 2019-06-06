@@ -2,7 +2,7 @@ from unittest.mock import Mock, call, ANY
 
 from photobooth import Photobooth, Actions
 
-NUMBER_OF_TRAPS = 2
+NUMBER_OF_TRAPS = 3
 
 
 class FakeRandom:
@@ -144,7 +144,7 @@ def test_photobooth_normal():
         call.sleep(1),
         call.camera.take_picture(1)
     ])
-    assert result == "photo1"
+    assert result == ["photo1"]
 
 
 def test_photobooth_speed():
@@ -162,7 +162,7 @@ def test_photobooth_speed():
         call.sleep(1),
         call.camera.take_picture(1)
     ])
-    assert result == "photo1"
+    assert result == ["photo1"]
 
 
 def test_photobooth_slow():
@@ -192,4 +192,26 @@ def test_photobooth_slow():
         call.sleep(1),
         call.camera.take_picture(1)
     ])
-    assert result == "photo1"
+    assert result == ["photo1"]
+
+
+def test_photobooth_double():
+    mock = Mock()
+    mock.camera = Mock()
+    mock.screen = Mock()
+    mock.sleep = Mock()
+    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock())
+    mock.camera.take_picture.side_effect = ["photo1", "photo2"]
+    result = photobooth.double(1)
+    mock.assert_has_calls([
+        call.screen.update_display(message="3", background_color="black"),
+        call.sleep(1),
+        call.screen.update_display(message="2", background_color="black"),
+        call.sleep(1),
+        call.screen.update_display(message="1", background_color="black"),
+        call.sleep(1),
+        call.camera.take_picture(1),
+        call.sleep(1),
+        call.camera.take_picture(1)
+    ])
+    assert result == ["photo1", "photo2"]

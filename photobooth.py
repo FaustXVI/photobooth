@@ -25,15 +25,22 @@ class Photobooth:
 
     def normal(self, image_number):
         self.count_down(range(3, 0, -1))
-        return self.camera.take_picture(image_number)
+        return [self.camera.take_picture(image_number)]
 
     def fast(self, image_number):
         self.count_down(range(3, 1, -1))
-        return self.camera.take_picture(image_number)
+        return [self.camera.take_picture(image_number)]
 
     def slow(self, image_number):
         self.count_down([3, 2, 1.5, 1, 0.5, 0.25, 0.1, 0.01])
-        return self.camera.take_picture(image_number)
+        return [self.camera.take_picture(image_number)]
+
+    def double(self, image_number):
+        self.count_down(range(3, 0, -1))
+        first_picture = self.camera.take_picture(image_number)
+        self.sleep(1)
+        second_picture = self.camera.take_picture(image_number)
+        return [first_picture, second_picture]
 
     def run_shoot_scenario(self, image_number: int):
         if self.random.is_normal():
@@ -42,6 +49,7 @@ class Photobooth:
             return self.camera.with_preview(image_number, self.random.choice([
                 self.fast,
                 self.slow,
+                self.double,
             ]))
 
     def take_picture(self, image_number: int, number_of_pictures: int):
