@@ -41,7 +41,7 @@ class Photobooth:
         self.sleep(1)
         second_picture = self.camera.take_picture(image_number)
         return [first_picture, second_picture]
-    
+
     def horn(self, image_number):
         self.count_down(range(3, 0, -1))
         self.speakers.play_sound("sound/horn.wav")

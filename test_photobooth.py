@@ -216,6 +216,7 @@ def test_photobooth_double():
     ])
     assert result == ["photo1", "photo2"]
 
+
 def test_photobooth_horn():
     mock = Mock()
     mock.camera = Mock()
