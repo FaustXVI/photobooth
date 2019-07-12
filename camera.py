@@ -1,3 +1,5 @@
+from flash import Flash
+
 try:
     from datetime import datetime
     import picamera
@@ -10,7 +12,8 @@ try:
 
 
     class Camera:
-        def __init__(self, pictures_folder):
+        def __init__(self, pictures_folder, flash: Flash):
+            self.flash = flash
             self.pictures_folder = pictures_folder
             self.camera = picamera.PiCamera(resolution=HD_RESOLUTION,
                                             framerate=30,
@@ -32,7 +35,9 @@ try:
         def take_picture(self, image_number: int):
             time = datetime.now().strftime("%H_%M_%S")
             filename = os.path.join(self.pictures_folder, time + "_" + str(image_number) + '.jpg')
+            self.flash.turn_on()
             self.camera.capture(filename)
+            self.flash.turn_off()
             return filename
 
         def with_preview(self, i, f):
