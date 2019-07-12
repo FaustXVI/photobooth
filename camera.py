@@ -49,7 +49,7 @@ try:
 except ImportError:
 
     class Camera:
-        def __init__(self, pictures_folder):
+        def __init__(self, pictures_folder, flash: Relay):
             self.pictures_folder = pictures_folder
 
         def __enter__(self):
