@@ -2,12 +2,11 @@ try:
     import RPi.GPIO as GPIO
 
 
-    class Button:
-        def __init__(self, pin_number: int, action):
+    class Flash:
+        def __init__(self, pin_number: int):
             self.pin_number = pin_number
-            self.action = action
             GPIO.setmode(GPIO.BOARD)
-            GPIO.setup(pin_number, GPIO.IN)
+            GPIO.setup(pin_number, GPIO.OUT)
 
         def __enter__(self):
             return self
@@ -15,16 +14,17 @@ try:
         def __exit__(self, exc_type, exc_val, exc_tb):
             GPIO.cleanup()
 
-        def next_action(self):
-            input_state = GPIO.input(self.pin_number)
-            if input_state:
-                return self.action
-            else:
-                return None
+        def turn_on(self):
+            GPIO.output(self.pin_number, GPIO.HIGH)
+            pass
+
+        def turn_off(self):
+            GPIO.output(self.pin_number, GPIO.LOW)
+            pass
 
 except ImportError:
-    class Button:
-        def __init__(self, pin_number: int, action):
+    class Flash:
+        def __init__(self, pin_number: int):
             pass
 
         def __enter__(self):
@@ -33,5 +33,8 @@ except ImportError:
         def __exit__(self, exc_type, exc_val, exc_tb):
             pass
 
-        def next_action(self):
-            return None
+        def turn_on(self):
+            pass
+
+        def turn_off(self):
+            pass
