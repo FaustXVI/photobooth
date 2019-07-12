@@ -13,5 +13,6 @@ pkgs.stdenv.mkDerivation {
   name = "photobooth";
   buildInputs = [
     python-with-my-packages
+    fritzing
   ];
 }
