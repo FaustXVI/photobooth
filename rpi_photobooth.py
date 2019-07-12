@@ -5,7 +5,7 @@ import os
 from actionables import Actionables
 from button import Button
 from camera import Camera
-from flash import Flash
+from relay import Relay
 from keyboard import Keyboard
 from my_random import MyRandom
 from photobooth import Photobooth, Actions
@@ -22,7 +22,7 @@ def main():
                 screen.update_display(message='Folder Check...', size=100)
                 os.makedirs(IMAGE_FOLDER, exist_ok=True)
                 speakers = Speaker()
-                with Flash(7) as flash :
+                with Relay(7) as flash :
                     with Camera(IMAGE_FOLDER, flash) as camera:
                         actionables = Actionables([picture_button, destruction_button, Keyboard()])
                         Photobooth(screen, camera, actionables, time.sleep, speakers, MyRandom()).start()

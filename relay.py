@@ -2,7 +2,7 @@ try:
     import RPi.GPIO as GPIO
 
 
-    class Flash:
+    class Relay:
         def __init__(self, pin_number: int):
             self.pin_number = pin_number
             GPIO.setmode(GPIO.BOARD)
@@ -23,7 +23,7 @@ try:
             pass
 
 except ImportError:
-    class Flash:
+    class Relay:
         def __init__(self, pin_number: int):
             pass
 

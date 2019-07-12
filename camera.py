@@ -1,4 +1,4 @@
-from flash import Flash
+from relay import Relay
 
 try:
     from datetime import datetime
@@ -12,7 +12,7 @@ try:
 
 
     class Camera:
-        def __init__(self, pictures_folder, flash: Flash):
+        def __init__(self, pictures_folder, flash: Relay):
             self.flash = flash
             self.pictures_folder = pictures_folder
             self.camera = picamera.PiCamera(resolution=HD_RESOLUTION,
