@@ -15,11 +15,11 @@ try:
             GPIO.cleanup()
 
         def turn_on(self):
-            GPIO.output(self.pin_number, GPIO.HIGH)
+            GPIO.output(self.pin_number, GPIO.LOW)
             pass
 
         def turn_off(self):
-            GPIO.output(self.pin_number, GPIO.LOW)
+            GPIO.output(self.pin_number, GPIO.HIGH)
             pass
 
 except ImportError:
