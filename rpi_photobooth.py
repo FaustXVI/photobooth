@@ -16,19 +16,18 @@ IMAGE_FOLDER = 'Photos'
 
 
 def main():
-    with Screen() as screen:
-        with Button(12, Actions.TAKE_PICTURES) as picture_button:
-            with Button(11, Actions.SELF_DESTRUCT) as destruction_button:
-                screen.update_display(message='Folder Check...', size=100)
-                os.makedirs(IMAGE_FOLDER, exist_ok=True)
-                speakers = Speaker()
-                with Relay(13) as ioniser:
-                    with Relay(15) as fan:
-                        with Relay(7) as flash:
-                            with Camera(IMAGE_FOLDER, flash) as camera:
-                                actionables = Actionables([picture_button, destruction_button, Keyboard()])
-                                Photobooth(screen, camera, actionables, time.sleep, speakers, ioniser, fan,
-                                           MyRandom()).start()
+    with Screen() as screen, \
+            Button(12, Actions.TAKE_PICTURES) as picture_button, \
+            Button(11, Actions.SELF_DESTRUCT) as destruction_button, \
+            Relay(13) as ioniser, \
+            Relay(15) as fan, \
+            Relay(7) as flash, \
+            Camera(IMAGE_FOLDER, flash) as camera:
+        screen.update_display(message='Folder Check...', size=100)
+        os.makedirs(IMAGE_FOLDER, exist_ok=True)
+        speakers = Speaker()
+        actionables = Actionables([picture_button, destruction_button, Keyboard()])
+        Photobooth(screen, camera, actionables, time.sleep, speakers, ioniser, fan, MyRandom()).start()
 
 
 if __name__ == '__main__':
