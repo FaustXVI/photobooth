@@ -6,7 +6,7 @@ try:
         def __init__(self, pin_number: int):
             self.pin_number = pin_number
             GPIO.setmode(GPIO.BOARD)
-            GPIO.setup(pin_number, GPIO.OUT, initial = GPIO.HIGH)
+            GPIO.setup(pin_number, GPIO.OUT, initial = GPIO.LOW)
 
         def __enter__(self):
             return self
@@ -15,11 +15,11 @@ try:
             GPIO.cleanup()
 
         def turn_on(self):
-            GPIO.output(self.pin_number, GPIO.LOW)
+            GPIO.output(self.pin_number, GPIO.HIGH)
             pass
 
         def turn_off(self):
-            GPIO.output(self.pin_number, GPIO.HIGH)
+            GPIO.output(self.pin_number, GPIO.LOW)
             pass
 
 except ImportError:
