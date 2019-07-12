@@ -6,7 +6,7 @@ try:
         def __init__(self, pin_number: int):
             self.pin_number = pin_number
             GPIO.setmode(GPIO.BOARD)
-            GPIO.setup(pin_number, GPIO.OUT)
+            GPIO.setup(pin_number, GPIO.OUT, initial = GPIO.HIGH)
 
         def __enter__(self):
             return self
