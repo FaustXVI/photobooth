@@ -2,20 +2,20 @@ import time
 
 import os
 
-from actionables import Actionables
-from button import Button
-from camera import Camera
+from infrastructure.actionables import Actionables
+from infrastructure.button import Button
+from infrastructure.camera import Camera
 from traps.double_trap import DoubleTrap
 from traps.horn_trap import HornTrap
 from traps.no_trap import NoTrap
-from relay import Relay
-from keyboard import Keyboard
-from my_random import MyRandom
+from infrastructure.relay import Relay
+from infrastructure.keyboard import Keyboard
+from infrastructure.my_random import MyRandom
 from photobooth import Photobooth, Actions
-from screen import Screen
+from infrastructure.screen import Screen
 from traps.self_destruction import SelfDestruction
 from traps.slow_trap import SlowTrap
-from speakers import Speaker
+from infrastructure.speakers import Speaker
 from traps.speed_trap import SpeedTrap
 
 IMAGE_FOLDER = 'Photos'

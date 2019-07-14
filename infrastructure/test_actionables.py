@@ -1,6 +1,6 @@
 from unittest.mock import Mock
 
-from actionables import Actionables
+from infrastructure.actionables import Actionables
 from photobooth import Actions
 
 

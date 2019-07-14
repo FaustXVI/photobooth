@@ -1,4 +1,4 @@
-from relay import Relay
+from infrastructure.relay import Relay
 
 try:
     from datetime import datetime
