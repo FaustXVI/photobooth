@@ -12,10 +12,12 @@ def test_photobooth_speed():
     mock.camera.take_picture.side_effect = ["photo1"]
     result = trap.run(1)
     mock.assert_has_calls([
+        call.camera.start_preview(),
         call.screen.update_display(message="3", background_color="black"),
         call.sleep(1),
         call.screen.update_display(message="2", background_color="black"),
         call.sleep(1),
-        call.camera.take_picture(1)
+        call.camera.take_picture(1),
+        call.camera.stop_preview()
     ])
     assert result == ["photo1"]

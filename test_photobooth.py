@@ -25,46 +25,44 @@ class FakeRandom:
 
 def test_photobooth_quit():
     mock = Mock()
-    mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
     mock.traps = [Mock()]
     mock.normalMode = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep,  mock.normalMode, mock.traps, Mock(), FakeRandom([], []))
+    photobooth = Photobooth(mock.screen, button, mock.sleep,  mock.normalMode, mock.traps, Mock(), FakeRandom([], []))
     button.wait_for_event.side_effect = [Actions.QUIT]
     photobooth.start()
     mock.screen.show_image.assert_called()
-    mock.camera.take_pictures.assert_not_called()
 
 
 def test_photobooth_take_pictures():
     mock = Mock()
-    mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    mock.traps = [Mock()]
+    mock.trap = Mock()
     mock.normalMode = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.normalMode, mock.traps, Mock(),
+    photobooth = Photobooth(mock.screen,  button, mock.sleep, mock.normalMode, [mock.trap], Mock(),
                             FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.TAKE_PICTURES, Actions.QUIT]
-    mock.camera.with_preview.side_effect = [["photo1"], ["photo2"], ["photo3"]]
+    mock.normalMode.run.side_effect = [["photo1"], ["photo3"]]
+    mock.trap.run.side_effect = [["photo2"]]
     photobooth.start()
     mock.screen.show_image.assert_called()
     mock.assert_has_calls([call.screen.update_display(message='1/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(1, mock.normalMode),
+                           call.normalMode.run(1),
                            call.screen.show_picture("photo1"),
                            call.sleep(3),
                            call.screen.update_display(message='2/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(2, mock.traps[0]),
+                           call.trap.run(2),
                            call.screen.show_picture("photo2"),
                            call.sleep(3),
                            call.screen.update_display(message='3/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(3, mock.normalMode),
+                           call.normalMode.run(3),
                            call.screen.show_picture("photo3"),
                            call.sleep(3), ])
 
@@ -72,7 +70,6 @@ def test_photobooth_take_pictures():
 def test_photobooth_self_destruct():
     mock = Mock()
     mock.self_destruct = Mock()
-    mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
     mock.ioniser = Mock()
@@ -80,7 +77,7 @@ def test_photobooth_self_destruct():
     button = Mock()
     mock.traps = [Mock()]
     mock.normalMode = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep,
+    photobooth = Photobooth(mock.screen, button, mock.sleep,
                             mock.normalMode,mock.traps,
                             mock.self_destruct,
                             FakeRandom([True, False, True], [0]))

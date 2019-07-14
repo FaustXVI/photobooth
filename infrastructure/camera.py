@@ -40,11 +40,11 @@ try:
             self.flash.turn_off()
             return filename
 
-        def with_preview(self, i, f):
+        def start_preview(self):
             self.camera.start_preview()
-            result = f(i)
+
+        def stop_preview(self):
             self.camera.stop_preview()
-            return result
 
 except ImportError:
 
@@ -61,5 +61,8 @@ except ImportError:
         def take_picture(self, image_number: int):
             return "images/unicorns.jpg"
 
-        def with_preview(self, i, f):
-            return f.run(i)
+        def start_preview(self):
+            pass
+
+        def stop_preview(self):
+            pass

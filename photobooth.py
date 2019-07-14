@@ -9,12 +9,11 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, camera, actionables, sleep, normal_mode, traps, self_destruct, random):
+    def __init__(self, screen, actionables, sleep, normal_mode, traps, self_destruct, random):
         locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
         self.sleep = sleep
         self.screen = screen
-        self.camera = camera
         self.actionables = actionables
         self.self_destruct = self_destruct
         self.traps = traps
@@ -22,9 +21,9 @@ class Photobooth:
 
     def run_shoot_scenario(self, image_number: int):
         if self.random.is_normal():
-            return self.camera.with_preview(image_number, self.normal_mode)
+            return self.normal_mode.run(image_number)
         else:
-            return self.camera.with_preview(image_number, self.random.choice(self.traps))
+            return self.random.choice(self.traps).run(image_number)
 
     def take_picture(self, image_number: int, number_of_pictures: int):
         self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)
