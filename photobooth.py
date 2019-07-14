@@ -9,7 +9,7 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, camera, actionables, sleep, speakers, ioniser, fan, random):
+    def __init__(self, screen, camera, actionables, sleep, speakers, self_destruct, random):
         locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
         self.sleep = sleep
@@ -17,8 +17,7 @@ class Photobooth:
         self.camera = camera
         self.actionables = actionables
         self.speakers = speakers
-        self.ioniser = ioniser
-        self.fan = fan
+        self.self_destruct = self_destruct
 
     def count_down(self, range, background_color='black'):
         for x in range:
@@ -74,22 +73,11 @@ class Photobooth:
         return [self.take_picture(i, number_of_pictures) for i in range(1, 1 + number_of_pictures)]
 
     def destruct(self):
-        self.ioniser.turn_on()
-        self.speakers.play_sound('sound/self-destruct.ogg')
-        self.screen.update_display(message='WARNING', background_color='red', size=500)
-        self.sleep(2)
-        self.screen.update_display(message='self-destruction', background_color='red', size=400)
-        self.sleep(3)
-        self.count_down(range(10, 3, -1), background_color="red")
-        self.fan.turn_on()
-        self.count_down(range(3, 0, -1), background_color="red")
-        self.fan.turn_off()
-        self.screen.show_picture("images/bsod.png")
-        self.sleep(1)
-        picture = self.camera.take_picture(1)
-        self.ioniser.turn_off()
-        self.screen.show_picture(picture)
-        self.sleep(3)
+        pictures = self.self_destruct.run()
+        for picture in pictures:
+            self.screen.show_picture(picture)
+            self.sleep(3)
+        return pictures
 
     def start(self):
         action = Actions.TAKE_PICTURES

@@ -10,6 +10,7 @@ from keyboard import Keyboard
 from my_random import MyRandom
 from photobooth import Photobooth, Actions
 from screen import Screen
+from self_destruction import SelfDestruction
 from speakers import Speaker
 
 IMAGE_FOLDER = 'Photos'
@@ -27,7 +28,8 @@ def main():
         os.makedirs(IMAGE_FOLDER, exist_ok=True)
         speakers = Speaker()
         actionables = Actionables([picture_button, destruction_button, Keyboard()])
-        Photobooth(screen, camera, actionables, time.sleep, speakers, ioniser, fan, MyRandom()).start()
+        self_destruction = SelfDestruction(screen, camera, time.sleep, speakers, ioniser, fan)
+        Photobooth(screen, camera, actionables, time.sleep, speakers, self_destruction, MyRandom()).start()
 
 
 if __name__ == '__main__':
