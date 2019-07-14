@@ -1,7 +1,7 @@
 import locale
 from unittest.mock import Mock, call
 
-from slow_trap import SlowTrap
+from traps.slow_trap import SlowTrap
 
 def test_photobooth_slow():
     locale.setlocale(locale.LC_ALL, "fr_FR.utf8")

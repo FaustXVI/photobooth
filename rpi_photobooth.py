@@ -5,18 +5,18 @@ import os
 from actionables import Actionables
 from button import Button
 from camera import Camera
-from double_trap import DoubleTrap
-from horn_trap import HornTrap
-from no_trap import NoTrap
+from traps.double_trap import DoubleTrap
+from traps.horn_trap import HornTrap
+from traps.no_trap import NoTrap
 from relay import Relay
 from keyboard import Keyboard
 from my_random import MyRandom
 from photobooth import Photobooth, Actions
 from screen import Screen
-from self_destruction import SelfDestruction
-from slow_trap import SlowTrap
+from traps.self_destruction import SelfDestruction
+from traps.slow_trap import SlowTrap
 from speakers import Speaker
-from speed_trap import SpeedTrap
+from traps.speed_trap import SpeedTrap
 
 IMAGE_FOLDER = 'Photos'
 

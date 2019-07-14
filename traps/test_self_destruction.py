@@ -1,6 +1,6 @@
-from unittest.mock import Mock, call, ANY
+from unittest.mock import Mock, call
 
-from self_destruction import SelfDestruction
+from traps.self_destruction import SelfDestruction
 
 
 def test_photobooth_self_destruct():
