@@ -27,12 +27,13 @@ def main():
     config = configparser.ConfigParser()
     config.read('config')
     cluster = Cluster(config['cluster.co'])
+    gpio = config['gpio']
     with Screen() as screen, \
-            Button(12, Actions.TAKE_PICTURES) as picture_button, \
-            Button(11, Actions.SELF_DESTRUCT) as destruction_button, \
-            Relay(13) as ioniser, \
-            Relay(15) as fan, \
-            Relay(7) as flash, \
+            Button(gpio['take_picture'], Actions.TAKE_PICTURES) as picture_button, \
+            Button(gpio['self_destruct'], Actions.SELF_DESTRUCT) as destruction_button, \
+            Relay(gpio['ioniser']) as ioniser, \
+            Relay(gpio['fan']) as fan, \
+            Relay(gpio['flash']) as flash, \
             Camera(IMAGE_FOLDER, flash) as camera:
         screen.update_display(message='Folder Check...', size=100, duration=0)
         os.makedirs(IMAGE_FOLDER, exist_ok=True)

@@ -2,3 +2,10 @@
 login = clusterMail
 password = changeMe
 album_id = id
+
+[gpio]
+take_picture = 12
+self_destruct = 11
+ioniser = 13
+fan = 15
+flash = 7
