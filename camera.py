@@ -62,4 +62,4 @@ except ImportError:
             return "images/unicorns.jpg"
 
         def with_preview(self, i, f):
-            return f(i)
+            return f.run(i)

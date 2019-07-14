@@ -28,9 +28,10 @@ def test_photobooth_quit():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    mock.speakers = Mock()
+    mock.traps = [Mock()]
+    mock.normalMode = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers, Mock(), FakeRandom([], []))
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep,  mock.normalMode, mock.traps, Mock(), FakeRandom([], []))
     button.wait_for_event.side_effect = [Actions.QUIT]
     photobooth.start()
     mock.screen.show_image.assert_called()
@@ -42,9 +43,10 @@ def test_photobooth_take_pictures():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    mock.speakers = Mock()
+    mock.traps = [Mock()]
+    mock.normalMode = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers, Mock(),
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.normalMode, mock.traps, Mock(),
                             FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.TAKE_PICTURES, Actions.QUIT]
     mock.camera.with_preview.side_effect = [["photo1"], ["photo2"], ["photo3"]]
@@ -52,17 +54,17 @@ def test_photobooth_take_pictures():
     mock.screen.show_image.assert_called()
     mock.assert_has_calls([call.screen.update_display(message='1/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(1, photobooth.normal),
+                           call.camera.with_preview(1, mock.normalMode),
                            call.screen.show_picture("photo1"),
                            call.sleep(3),
                            call.screen.update_display(message='2/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(2, photobooth.fast),
+                           call.camera.with_preview(2, mock.traps[0]),
                            call.screen.show_picture("photo2"),
                            call.sleep(3),
                            call.screen.update_display(message='3/3', size=500),
                            call.sleep(1),
-                           call.camera.with_preview(3, photobooth.normal),
+                           call.camera.with_preview(3, mock.normalMode),
                            call.screen.show_picture("photo3"),
                            call.sleep(3), ])
 
@@ -73,11 +75,13 @@ def test_photobooth_self_destruct():
     mock.camera = Mock()
     mock.screen = Mock()
     mock.sleep = Mock()
-    mock.speakers = Mock()
     mock.ioniser = Mock()
     mock.fan = Mock()
     button = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep, mock.speakers,
+    mock.traps = [Mock()]
+    mock.normalMode = Mock()
+    photobooth = Photobooth(mock.screen, mock.camera, button, mock.sleep,
+                            mock.normalMode,mock.traps,
                             mock.self_destruct,
                             FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.SELF_DESTRUCT, Actions.QUIT]
@@ -88,130 +92,3 @@ def test_photobooth_self_destruct():
                            call.screen.show_picture("photo1"),
                            call.sleep(3) ])
 
-
-def test_photobooth_random_senario_normal():
-    camera = Mock()
-    photobooth = Photobooth(Mock(), camera, Mock(), Mock(), Mock(), Mock(), FakeRandom([True], []))
-    photobooth.run_shoot_scenario(1)
-    camera.assert_has_calls([call.with_preview(1, photobooth.normal)])
-
-
-def test_photobooth_random_senario_fast():
-    for i in range(0, NUMBER_OF_TRAPS):
-        camera = Mock()
-        photobooth = Photobooth(Mock(), camera, Mock(), Mock(), Mock(), Mock(),  FakeRandom([False], [i]))
-        photobooth.run_shoot_scenario(1)
-        camera.assert_has_calls([call.with_preview(1, ANY)])
-
-
-def test_photobooth_normal():
-    mock = Mock()
-    mock.camera = Mock()
-    mock.screen = Mock()
-    mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock(), Mock())
-    mock.camera.take_picture.side_effect = ["photo1"]
-    result = photobooth.normal(1)
-    mock.assert_has_calls([
-        call.screen.update_display(message="3", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="2", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="1", background_color="black"),
-        call.sleep(1),
-        call.camera.take_picture(1)
-    ])
-    assert result == ["photo1"]
-
-
-def test_photobooth_speed():
-    mock = Mock()
-    mock.camera = Mock()
-    mock.screen = Mock()
-    mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock(), Mock())
-    mock.camera.take_picture.side_effect = ["photo1"]
-    result = photobooth.fast(1)
-    mock.assert_has_calls([
-        call.screen.update_display(message="3", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="2", background_color="black"),
-        call.sleep(1),
-        call.camera.take_picture(1)
-    ])
-    assert result == ["photo1"]
-
-
-def test_photobooth_slow():
-    mock = Mock()
-    mock.camera = Mock()
-    mock.screen = Mock()
-    mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock(), Mock())
-    mock.camera.take_picture.side_effect = ["photo1"]
-    result = photobooth.slow(1)
-    mock.assert_has_calls([
-        call.screen.update_display(message="3", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="2", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="1,5", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="1", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="0,5", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="0,25", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="0,1", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="0,01", background_color="black"),
-        call.sleep(1),
-        call.camera.take_picture(1)
-    ])
-    assert result == ["photo1"]
-
-
-def test_photobooth_double():
-    mock = Mock()
-    mock.camera = Mock()
-    mock.screen = Mock()
-    mock.sleep = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, Mock(), Mock(), Mock())
-    mock.camera.take_picture.side_effect = ["photo1", "photo2"]
-    result = photobooth.double(1)
-    mock.assert_has_calls([
-        call.screen.update_display(message="3", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="2", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="1", background_color="black"),
-        call.sleep(1),
-        call.camera.take_picture(1),
-        call.sleep(1),
-        call.camera.take_picture(1)
-    ])
-    assert result == ["photo1", "photo2"]
-
-
-def test_photobooth_horn():
-    mock = Mock()
-    mock.camera = Mock()
-    mock.screen = Mock()
-    mock.sleep = Mock()
-    mock.speakers = Mock()
-    photobooth = Photobooth(mock.screen, mock.camera, Mock(), mock.sleep, mock.speakers, Mock(), Mock())
-    mock.camera.take_picture.side_effect = ["photo1"]
-    result = photobooth.horn(1)
-    mock.assert_has_calls([
-        call.screen.update_display(message="3", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="2", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="1", background_color="black"),
-        call.sleep(1),
-        call.speakers.play_sound("sound/horn.wav"),
-        call.sleep(1),
-        call.camera.take_picture(1)
-    ])
-    assert result == ["photo1"]

@@ -9,56 +9,22 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, camera, actionables, sleep, speakers, self_destruct, random):
+    def __init__(self, screen, camera, actionables, sleep, normal_mode, traps, self_destruct, random):
         locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
         self.sleep = sleep
         self.screen = screen
         self.camera = camera
         self.actionables = actionables
-        self.speakers = speakers
         self.self_destruct = self_destruct
-
-    def count_down(self, range, background_color='black'):
-        for x in range:
-            self.screen.update_display(message="{:n}".format(x), background_color=background_color)
-            self.sleep(1)
-
-    def normal(self, image_number):
-        self.count_down(range(3, 0, -1))
-        return [self.camera.take_picture(image_number)]
-
-    def fast(self, image_number):
-        self.count_down(range(3, 1, -1))
-        return [self.camera.take_picture(image_number)]
-
-    def slow(self, image_number):
-        self.count_down([3, 2, 1.5, 1, 0.5, 0.25, 0.1, 0.01])
-        return [self.camera.take_picture(image_number)]
-
-    def double(self, image_number):
-        self.count_down(range(3, 0, -1))
-        first_picture = self.camera.take_picture(image_number)
-        self.sleep(1)
-        second_picture = self.camera.take_picture(image_number)
-        return [first_picture, second_picture]
-
-    def horn(self, image_number):
-        self.count_down(range(3, 0, -1))
-        self.speakers.play_sound("sound/horn.wav")
-        self.sleep(1)
-        return [self.camera.take_picture(image_number)]
+        self.traps = traps
+        self.normal_mode = normal_mode
 
     def run_shoot_scenario(self, image_number: int):
         if self.random.is_normal():
-            return self.camera.with_preview(image_number, self.normal)
+            return self.camera.with_preview(image_number, self.normal_mode)
         else:
-            return self.camera.with_preview(image_number, self.random.choice([
-                self.fast,
-                self.slow,
-                self.double,
-                self.horn,
-            ]))
+            return self.camera.with_preview(image_number, self.random.choice(self.traps))
 
     def take_picture(self, image_number: int, number_of_pictures: int):
         self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)
