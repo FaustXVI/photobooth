@@ -42,11 +42,12 @@ def test_photobooth_take_pictures():
     mock.normalMode = Mock()
     button = Mock()
     mock.cluster = Mock()
-    photobooth = Photobooth(mock.screen,  button, mock.normalMode, [mock.trap], Mock(), mock.cluster,
+    photobooth = Photobooth(mock.screen, button, mock.normalMode, [mock.trap], Mock(), mock.cluster,
                             FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.TAKE_PICTURES, Actions.QUIT]
     mock.normalMode.run.side_effect = [["photo1"], ["photo3"]]
     mock.trap.run.side_effect = [["photo2"]]
+    mock.cluster.upload.side_effect = [True]
     photobooth.start()
     mock.screen.show_image.assert_called()
     mock.assert_has_calls([call.screen.update_display(message='1/3', size=500),
@@ -58,8 +59,8 @@ def test_photobooth_take_pictures():
                            call.screen.update_display(message='3/3', size=500),
                            call.normalMode.run(3),
                            call.screen.show_picture("photo3"),
-                           call.screen.update_display(message='Uploading...', size=100, duration=0),
-                           call.cluster.upload(["photo1","photo2","photo3"])])
+                           call.screen.update_display(message='Uploading to cluster...', size=100, duration=0),
+                           call.cluster.upload(["photo1", "photo2", "photo3"])])
 
 
 def test_photobooth_self_destruct():
@@ -70,14 +71,38 @@ def test_photobooth_self_destruct():
     mock.traps = [Mock()]
     mock.normalMode = Mock()
     mock.cluster = Mock()
-    photobooth = Photobooth(mock.screen, button, mock.normalMode,mock.traps, mock.self_destruct, mock.cluster,
+    photobooth = Photobooth(mock.screen, button, mock.normalMode, mock.traps, mock.self_destruct, mock.cluster,
                             FakeRandom([True, False, True], [0]))
     button.wait_for_event.side_effect = [Actions.SELF_DESTRUCT, Actions.QUIT]
     mock.self_destruct.run.side_effect = [["photo1"]]
+    mock.cluster.upload.side_effect = [True]
     photobooth.start()
     mock.screen.show_image.assert_called()
     mock.assert_has_calls([call.self_destruct.run(),
                            call.screen.show_picture("photo1"),
-                           call.screen.update_display(message='Uploading...', size=100, duration=0),
+                           call.screen.update_display(message='Uploading to cluster...', size=100, duration=0),
                            call.cluster.upload(["photo1"])])
 
+
+def test_photobooth_upload_failed():
+    mock = Mock()
+    mock.self_destruct = Mock()
+    mock.screen = Mock()
+    button = Mock()
+    mock.traps = [Mock()]
+    mock.normalMode = Mock()
+    mock.cluster = Mock()
+    photobooth = Photobooth(mock.screen, button, mock.normalMode, mock.traps, mock.self_destruct, mock.cluster,
+                            FakeRandom([True, False, True], [0]))
+    button.wait_for_event.side_effect = [Actions.SELF_DESTRUCT, Actions.QUIT]
+    mock.self_destruct.run.side_effect = [["photo1"]]
+    mock.cluster.upload.side_effect = [False]
+    photobooth.start()
+    mock.screen.show_image.assert_called()
+    mock.assert_has_calls([call.self_destruct.run(),
+                           call.screen.show_picture("photo1"),
+                           call.screen.update_display(message='Uploading to cluster...', size=100, duration=0),
+                           call.cluster.upload(["photo1"]),
+                           call.screen.update_display(message='Failed :(', size=100)
+                           ])
+   

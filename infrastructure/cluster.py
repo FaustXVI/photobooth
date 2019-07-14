@@ -21,15 +21,19 @@ class Cluster:
         self.s.post(url, login, headers={'Referer': url})
 
     def upload(self, images):
-        for image in images:
-            files = {'upload': open(image, 'rb')}
-            res_upload = self.s.post(upload_url, files=files)
-            upload_id = str(res_upload.json()['uploadId'])
-            post = {
-                'url': 'photos',
-                'method': 'POST',
-                'headers': 'Content-Type=application%2Fx-www-form-urlencoded',
-                'body': 'cluster_id=' + self.album_id + '&gae_upload_id=' + upload_id,
-                'csrfToken': self.s.cookies['csrf_cluster']
-            }
-            r = self.s.post(post_url, post)
+        try:
+            for image in images:
+                files = {'upload': open(image, 'rb')}
+                res_upload = self.s.post(upload_url, files=files)
+                upload_id = str(res_upload.json()['uploadId'])
+                post = {
+                    'url': 'photos',
+                    'method': 'POST',
+                    'headers': 'Content-Type=application%2Fx-www-form-urlencoded',
+                    'body': 'cluster_id=' + self.album_id + '&gae_upload_id=' + upload_id,
+                    'csrfToken': self.s.cookies['csrf_cluster']
+                }
+                self.s.post(post_url, post)
+            return True
+        except:
+            return False
