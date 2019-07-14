@@ -1,13 +1,9 @@
-class NoTrap:
-    def __init__(self, screen, camera, sleep):
-        self.sleep = sleep
-        self.screen = screen
-        self.camera = camera
+from traps.trap import Trap
 
-    def count_down(self, range, background_color='black'):
-        for x in range:
-            self.screen.update_display(message="{:n}".format(x), background_color=background_color)
-            self.sleep(1)
+
+class NoTrap(Trap):
+    def __init__(self, screen, camera, sleep):
+        super().__init__(screen, camera, sleep)
 
     def run(self, image_number):
         self.count_down(range(3, 0, -1))
