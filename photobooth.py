@@ -9,7 +9,7 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, actionables, normal_mode, traps, self_destruct, random):
+    def __init__(self, screen, actionables, normal_mode, traps, self_destruct, cluster, random):
         locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
         self.screen = screen
@@ -17,6 +17,7 @@ class Photobooth:
         self.self_destruct = self_destruct
         self.traps = traps
         self.normal_mode = normal_mode
+        self.cluster = cluster
 
     def run_shoot_scenario(self, image_number: int):
         if self.random.is_normal():
@@ -35,12 +36,17 @@ class Photobooth:
             self.screen.show_picture(picture)
 
     def take_pictures(self, number_of_pictures: int):
-        return [self.take_picture(i, number_of_pictures) for i in range(1, 1 + number_of_pictures)]
+        pictures = [self.take_picture(i, number_of_pictures) for i in range(1, 1 + number_of_pictures)]
+        return [y for x in pictures for y in x]
 
     def destruct(self):
         pictures = self.self_destruct.run()
         self.show_pictures(pictures)
         return pictures
+
+    def upload(self, pictures):
+        self.screen.update_display(message='Uploading...', size=100, duration=0)
+        self.cluster.upload(pictures)
 
     def start(self):
         action = Actions.TAKE_PICTURES
@@ -48,6 +54,6 @@ class Photobooth:
             self.screen.show_image('images/start_camera.jpg')
             action = self.actionables.wait_for_event()
             if action == Actions.TAKE_PICTURES:
-                self.take_pictures(3)
+                self.upload(self.take_pictures(3))
             if action == Actions.SELF_DESTRUCT:
-                self.destruct()
+                self.upload(self.destruct())

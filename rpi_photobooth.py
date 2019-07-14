@@ -1,10 +1,12 @@
 import time
 
+import configparser
 import os
 
 from infrastructure.actionables import Actionables
 from infrastructure.button import Button
 from infrastructure.camera import Camera
+from infrastructure.cluster import Cluster
 from traps.double_trap import DoubleTrap
 from traps.horn_trap import HornTrap
 from traps.no_trap import NoTrap
@@ -22,6 +24,9 @@ IMAGE_FOLDER = 'Photos'
 
 
 def main():
+    config = configparser.ConfigParser()
+    config.read('config')
+    cluster = Cluster(config['cluster.co'])
     with Screen() as screen, \
             Button(12, Actions.TAKE_PICTURES) as picture_button, \
             Button(11, Actions.SELF_DESTRUCT) as destruction_button, \
@@ -29,7 +34,7 @@ def main():
             Relay(15) as fan, \
             Relay(7) as flash, \
             Camera(IMAGE_FOLDER, flash) as camera:
-        screen.update_display(message='Folder Check...', size=100)
+        screen.update_display(message='Folder Check...', size=100, duration=0)
         os.makedirs(IMAGE_FOLDER, exist_ok=True)
         speakers = Speaker()
         actionables = Actionables([picture_button, destruction_button, Keyboard()])
@@ -41,7 +46,7 @@ def main():
             DoubleTrap(screen, camera, time.sleep),
             HornTrap(screen, camera, time.sleep, speakers)
         ]
-        Photobooth(screen, actionables, normal_mode, traps, self_destruction, MyRandom()).start()
+        Photobooth(screen, actionables, normal_mode, traps, self_destruction, cluster, MyRandom()).start()
 
 
 if __name__ == '__main__':
