@@ -33,15 +33,15 @@ def main():
         os.makedirs(IMAGE_FOLDER, exist_ok=True)
         speakers = Speaker()
         actionables = Actionables([picture_button, destruction_button, Keyboard()])
-        self_destruction = SelfDestruction(screen, camera, time.sleep, speakers, ioniser, fan)
-        normal_mode = NoTrap(screen, camera, time.sleep)
+        self_destruction = SelfDestruction(screen, camera, speakers, ioniser, fan)
+        normal_mode = NoTrap(screen, camera)
         traps = [
-            SlowTrap(screen, camera, time.sleep),
-            SpeedTrap(screen, camera, time.sleep),
+            SlowTrap(screen, camera),
+            SpeedTrap(screen, camera),
             DoubleTrap(screen, camera, time.sleep),
             HornTrap(screen, camera, time.sleep, speakers)
         ]
-        Photobooth(screen, actionables, time.sleep, normal_mode, traps, self_destruction, MyRandom()).start()
+        Photobooth(screen, actionables, normal_mode, traps, self_destruction, MyRandom()).start()
 
 
 if __name__ == '__main__':

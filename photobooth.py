@@ -9,10 +9,9 @@ class Actions(Enum):
 
 
 class Photobooth:
-    def __init__(self, screen, actionables, sleep, normal_mode, traps, self_destruct, random):
+    def __init__(self, screen, actionables, normal_mode, traps, self_destruct, random):
         locale.setlocale(locale.LC_ALL, "fr_FR.utf8")
         self.random = random
-        self.sleep = sleep
         self.screen = screen
         self.actionables = actionables
         self.self_destruct = self_destruct
@@ -27,21 +26,20 @@ class Photobooth:
 
     def take_picture(self, image_number: int, number_of_pictures: int):
         self.screen.update_display(message=str(image_number) + '/' + str(number_of_pictures), size=500)
-        self.sleep(1)
         pictures = self.run_shoot_scenario(image_number)
+        self.show_pictures(pictures)
+        return pictures
+
+    def show_pictures(self,pictures):
         for picture in pictures:
             self.screen.show_picture(picture)
-            self.sleep(3)
-        return pictures
 
     def take_pictures(self, number_of_pictures: int):
         return [self.take_picture(i, number_of_pictures) for i in range(1, 1 + number_of_pictures)]
 
     def destruct(self):
         pictures = self.self_destruct.run()
-        for picture in pictures:
-            self.screen.show_picture(picture)
-            self.sleep(3)
+        self.show_pictures(pictures)
         return pictures
 
     def start(self):

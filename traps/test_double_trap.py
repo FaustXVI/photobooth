@@ -13,12 +13,9 @@ def test_photobooth_double():
     result = trap.run(1)
     mock.assert_has_calls([
         call.camera.start_preview(),
-        call.screen.update_display(message="3", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="2", background_color="black"),
-        call.sleep(1),
-        call.screen.update_display(message="1", background_color="black"),
-        call.sleep(1),
+        call.screen.update_display(message="3"),
+        call.screen.update_display(message="2"),
+        call.screen.update_display(message="1"),
         call.camera.take_picture(1),
         call.sleep(1),
         call.camera.take_picture(1),

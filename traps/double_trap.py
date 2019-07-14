@@ -3,7 +3,8 @@ from traps.trap import Trap
 
 class DoubleTrap(Trap):
     def __init__(self, screen, camera, sleep):
-        super().__init__(screen, camera, sleep)
+        super().__init__(screen, camera)
+        self.sleep = sleep
 
     def run_trap(self, image_number):
         self.count_down(range(3, 0, -1))

@@ -1,4 +1,5 @@
 import pygame
+import time
 
 
 class Screen:
@@ -16,7 +17,7 @@ class Screen:
     def __exit__(self, exc_type, exc_val, exc_tb):
         pygame.quit()
 
-    def update_display(self, message: str, background_color: str = "black", size: int = 800):
+    def update_display(self, message: str, background_color: str = "black", size: int = 800, duration = 1):
         self.background.fill(pygame.Color(background_color))
         font = pygame.font.Font(None, size)
         text = font.render(message, 1, (227, 157, 200))
@@ -26,6 +27,7 @@ class Screen:
         self.background.blit(text, textpos)
         self.screen.blit(self.background, (0, 0))
         pygame.display.flip()
+        time.sleep(duration)
 
     def show_image(self, image_path):
         self.screen.fill(pygame.Color("white"))
@@ -37,10 +39,11 @@ class Screen:
         self.screen.blit(img, (x, y))
         pygame.display.flip()
 
-    def show_picture(self, file):
+    def show_picture(self, file, duration = 3):
         self.background.fill((0, 0, 0))
         img = pygame.image.load(file)
         img = pygame.transform.scale(img, self.screen.get_size())
         self.background.blit(img, (0, 0))
         self.screen.blit(self.background, (0, 0))
         pygame.display.flip()
+        time.sleep(duration)

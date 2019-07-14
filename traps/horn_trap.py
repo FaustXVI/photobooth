@@ -3,7 +3,8 @@ from traps.trap import Trap
 
 class HornTrap(Trap):
     def __init__(self, screen, camera, sleep, speakers):
-        super().__init__(screen, camera, sleep)
+        super().__init__(screen, camera)
+        self.sleep = sleep
         self.speakers = speakers
 
     def run_trap(self, image_number):
