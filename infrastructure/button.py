@@ -7,7 +7,7 @@ try:
             self.pin_number = pin_number
             self.action = action
             GPIO.setmode(GPIO.BOARD)
-            GPIO.setup(pin_number, GPIO.IN)
+            GPIO.setup(pin_number, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
 
         def __enter__(self):
             return self
