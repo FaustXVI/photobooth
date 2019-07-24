@@ -17,7 +17,7 @@ def test_photobooth_self_destruct():
     mock.assert_has_calls([call.ioniser.turn_on(),
                            call.speakers.play_sound('sound/self-destruct.ogg'),
                            call.screen.update_display(message='WARNING', background_color='red', size=500, duration=2),
-                           call.screen.update_display(message='self-destruction', background_color='red', size=400,
+                           call.screen.update_display(message='self-destruction', background_color='red', size=350,
                                                       duration=3),
                            call.screen.update_display(message="10", background_color='red'),
                            call.screen.update_display(message="9", background_color='red'),

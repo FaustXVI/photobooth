@@ -17,7 +17,7 @@ class SelfDestruction():
         self.ioniser.turn_on()
         self.speakers.play_sound('sound/self-destruct.ogg')
         self.screen.update_display(message='WARNING', background_color='red', size=500, duration=2)
-        self.screen.update_display(message='self-destruction', background_color='red', size=400,duration=3)
+        self.screen.update_display(message='self-destruction', background_color='red', size=350,duration=3)
         self.count_down(range(10, 3, -1))
         self.fan.turn_on()
         self.count_down(range(3, 0, -1))
