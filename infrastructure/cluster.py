@@ -1,5 +1,7 @@
 import requests
 import re
+import sys
+import traceback
 
 url = "https://cluster.co/login/"
 upload_url = 'https://cluster-blobstoreimages.appspot.com/image_upload'
@@ -9,19 +11,22 @@ post_url = 'https://cluster.co/__proxy__/cluster'
 class Cluster:
     def __init__(self, config):
         self.album_id = config['album_id']
+        self.login = config['login']
+        self.password = config['password']
         self.s = requests.Session()
 
     def upload(self, images):
         try:
-            r = self.s.get(url)
-            csrfmiddlewaretoken = re.findall("name=.csrfmiddlewaretoken.+value=[\"'](.*)[\"']", r.text)[0]
-            login = {
-                'email_or_phone': config['login'],
-                'password': config['password'],
-                'csrfmiddlewaretoken': csrfmiddlewaretoken,
-                'redirect': '/'
-            }
-            self.s.post(url, login, headers={'Referer': url})
+            if len(self.s.cookies) == 0:
+                r = self.s.get(url)
+                csrfmiddlewaretoken = re.findall("name=.csrfmiddlewaretoken.+value=[\"'](.*)[\"']", r.text)[0]
+                login = {
+                    'email_or_phone': self.login,
+                    'password': self.password,
+                    'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                    'redirect': '/'
+                }
+                self.s.post(url, login, headers={'Referer': url})
             for image in images:
                 files = {'upload': open(image, 'rb')}
                 res_upload = self.s.post(upload_url, files=files)
@@ -36,4 +41,6 @@ class Cluster:
                 self.s.post(post_url, post)
             return True
         except:
+            print("Cluster crash")
+            traceback.print_exc()
             return False
