@@ -10,18 +10,18 @@ class Cluster:
     def __init__(self, config):
         self.album_id = config['album_id']
         self.s = requests.Session()
-        r = self.s.get(url)
-        csrfmiddlewaretoken = re.findall("name=.csrfmiddlewaretoken.+value=[\"'](.*)[\"']", r.text)[0]
-        login = {
-            'email_or_phone': config['login'],
-            'password': config['password'],
-            'csrfmiddlewaretoken': csrfmiddlewaretoken,
-            'redirect': '/'
-        }
-        self.s.post(url, login, headers={'Referer': url})
 
     def upload(self, images):
         try:
+            r = self.s.get(url)
+            csrfmiddlewaretoken = re.findall("name=.csrfmiddlewaretoken.+value=[\"'](.*)[\"']", r.text)[0]
+            login = {
+                'email_or_phone': config['login'],
+                'password': config['password'],
+                'csrfmiddlewaretoken': csrfmiddlewaretoken,
+                'redirect': '/'
+            }
+            self.s.post(url, login, headers={'Referer': url})
             for image in images:
                 files = {'upload': open(image, 'rb')}
                 res_upload = self.s.post(upload_url, files=files)
