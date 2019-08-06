@@ -9,3 +9,6 @@ self_destruct = 11
 ioniser = 13
 fan = 15
 flash = 7
+
+[photobooth]
+trap_percentage = 10
