@@ -4,6 +4,7 @@ try:
     from datetime import datetime
     import picamera
     import os
+    import time
 
     HD_RESOLUTION = (1920, 1080)
 
@@ -33,9 +34,10 @@ try:
             self.camera.__exit__(exc_type, exc_val, exc_tb)
 
         def take_picture(self, image_number: int):
-            time = datetime.now().strftime("%H_%M_%S")
-            filename = os.path.join(self.pictures_folder, time + "_" + str(image_number) + '.jpg')
+            now = datetime.now().strftime("%H_%M_%S")
+            filename = os.path.join(self.pictures_folder, now + "_" + str(image_number) + '.jpg')
             self.flash.turn_on()
+            time.sleep(0.5)
             self.camera.capture(filename)
             self.flash.turn_off()
             return filename
