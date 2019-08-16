@@ -4,7 +4,7 @@ import random
 class MyRandom:
     def __init__(self,percentage):
         self.random = random
-        slef.percentage = percentage
+        self.percentage = percentage
 
     def choice(self, array):
         return self.random.choice(array)

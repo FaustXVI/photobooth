@@ -48,7 +48,7 @@ def main():
             DoubleTrap(screen, camera, time.sleep),
             HornTrap(screen, camera, time.sleep, speakers)
         ]
-        Photobooth(screen, actionables, normal_mode, traps, self_destruction, cluster, MyRandom(photobooth_config['trap_percentage'])).start()
+        Photobooth(screen, actionables, normal_mode, traps, self_destruction, cluster, MyRandom(int(photobooth_config['trap_percentage']))).start()
 
 
 if __name__ == '__main__':
