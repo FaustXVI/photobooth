@@ -1,0 +1,4 @@
+[Desktop Entry] 
+Name=Photobooth
+Type=Application
+Exec=./home/pi/photobooth/photobooth-script.sh

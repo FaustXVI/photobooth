@@ -1,5 +1,3 @@
 #!/bin/sh
-
-cd /
-cd home/pi/Partage/Photobooth/
-sudo python camera.py
+cd home/pi/photobooth/
+python photobooth.py
