@@ -45,7 +45,7 @@ class Photobooth:
         return pictures
 
     def upload(self, pictures):
-        self.screen.update_display(message='Uploading to cluster...', size=100, duration=0)
+        self.screen.update_display(message='Please wait...', size=100, duration=0)
         if not self.cluster.upload(pictures) :
             self.screen.update_display(message='Failed :(', size=100)
 
