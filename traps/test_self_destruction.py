@@ -30,7 +30,7 @@ def test_photobooth_self_destruct():
                            call.screen.update_display(message="3", background_color='red'),
                            call.screen.update_display(message="2", background_color='red'),
                            call.screen.update_display(message="1", background_color='red'),
-                           call.fan.turn_off(),
                            call.screen.show_picture("images/bsod.png"),
                            call.camera.take_picture(1),
+                           call.fan.turn_off(),
                            call.ioniser.turn_off()])

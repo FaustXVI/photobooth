@@ -21,8 +21,8 @@ class SelfDestruction():
         self.count_down(range(10, 3, -1))
         self.fan.turn_on()
         self.count_down(range(3, 0, -1))
-        self.fan.turn_off()
         self.screen.show_picture("images/bsod.png")
         picture = self.camera.take_picture(1)
+        self.fan.turn_off()
         self.ioniser.turn_off()
         return [picture]
