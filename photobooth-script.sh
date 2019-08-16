@@ -1,3 +1,3 @@
 #!/bin/sh
-cd home/pi/photobooth/
-python photobooth.py
+cd /home/pi/photobooth/
+python rpi_photobooth.py &> photobooth.log
