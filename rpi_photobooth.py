@@ -26,10 +26,10 @@ IMAGE_FOLDER = 'Photos'
 def main():
     config = configparser.ConfigParser()
     config.read('config')
-    cluster = Cluster(config['cluster.co'])
     gpio = config['gpio']
     photobooth_config = config['photobooth']
     with Screen() as screen, \
+            Cluster(config['cluster.co']) as cluster, \
             Button(int(gpio['take_picture']), Actions.TAKE_PICTURES) as picture_button, \
             Button(int(gpio['self_destruct']), Actions.SELF_DESTRUCT) as destruction_button, \
             Relay(int(gpio['ioniser'])) as ioniser, \
