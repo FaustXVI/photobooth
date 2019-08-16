@@ -1,6 +1,6 @@
 try:
     import RPi.GPIO as GPIO
-
+    import time
 
     class Button:
         def __init__(self, pin_number: int, action):
@@ -15,9 +15,13 @@ try:
         def __exit__(self, exc_type, exc_val, exc_tb):
             GPIO.cleanup()
 
+        def read_state(self):
+            time.sleep(0.01)
+            return GPIO.input(self.pin_number)
+
         def next_action(self):
-            input_state = GPIO.input(self.pin_number)
-            if input_state:
+            states = [self.read_state() for _ in range(1,5)]
+            if all(states):
                 return self.action
             else:
                 return None
