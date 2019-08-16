@@ -8,7 +8,7 @@ class HornTrap(Trap):
         self.speakers = speakers
 
     def run_trap(self, image_number):
-        self.count_down(range(3, 0, -1))
+        self.count_down(range(3, 2, -1))
         self.speakers.play_sound("sound/horn.wav")
-        self.sleep(1)
+        self.count_down(range(2, 0, -1))
         return [self.camera.take_picture(image_number)]

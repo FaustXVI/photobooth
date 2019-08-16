@@ -15,10 +15,9 @@ def test_photobooth_horn():
     mock.assert_has_calls([
         call.camera.start_preview(),
         call.screen.update_display(message="3"),
+        call.speakers.play_sound("sound/horn.wav"),
         call.screen.update_display(message="2"),
         call.screen.update_display(message="1"),
-        call.speakers.play_sound("sound/horn.wav"),
-        call.sleep(1),
         call.camera.take_picture(1),
         call.camera.stop_preview()
     ])
